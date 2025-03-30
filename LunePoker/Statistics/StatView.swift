@@ -9,7 +9,11 @@ import SwiftUI
 
 struct StatView: View {
     var body: some View {
-        Text("StatView")
+        ZStack {
+            Color.black.edgesIgnoringSafeArea(.all)
+            Text("StatView")
+                .foregroundStyle(.white)
+        }
     }
 }
 

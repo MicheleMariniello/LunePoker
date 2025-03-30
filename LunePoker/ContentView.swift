@@ -14,17 +14,19 @@ struct ContentView: View {
         TabView(selection: $selectedTab) {
             MatchView()
                 .tabItem {
-                    Label("Match", systemImage: "suit.spade.fill")
+                    Label("Matches", systemImage: "suit.spade.fill")
                 }
                 .tag(0)
-            StatView()
-                .tabItem {
-                    Label("Statistics", systemImage: "chart.bar.fill")
-                }
-                .tag(1)
+            
             PlayerView()
                 .tabItem {
                     Label("Players", systemImage: "person.3.fill")
+                }
+                .tag(1)
+            
+            StatView()
+                .tabItem {
+                    Label("Statistics", systemImage: "chart.bar.fill")
                 }
                 .tag(2)
         }

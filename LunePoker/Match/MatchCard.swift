@@ -11,7 +11,6 @@ import SwiftUI
 struct MatchCard: View {
     let match: Match
     let players: [Player]
-//    var numberOfPlayers: Int { players.count }
     
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -33,24 +32,24 @@ struct MatchCard: View {
                     .foregroundColor(.green)
             }
             
-            Divider().background(Color.gray)
+//            Divider().background(Color.gray)
             
-            Text("Partecipanti:")
-                .font(.subheadline)
-                .foregroundColor(.gray)
-            
-            // Mostra i nomi dei partecipanti con le loro quote
-            ForEach(match.participants) { participant in
-                if let player = playerByID(participant.playerID) {
-                    HStack {
-                        Text(player.nickname)
-                            .foregroundColor(.white)
-                        Spacer()
-                        Text("Quota: €\(String(format: "%.2f", participant.entryFee))")
-                            .foregroundColor(.blue)
-                    }
-                }
-            }
+//            Text("Partecipanti:")
+//                .font(.subheadline)
+//                .foregroundColor(.gray)
+//            
+//            // Mostra i nomi dei partecipanti con le loro quote
+//            ForEach(match.participants) { participant in
+//                if let player = playerByID(participant.playerID) {
+//                    HStack {
+//                        Text(player.nickname)
+//                            .foregroundColor(.white)
+//                        Spacer()
+//                        Text("Quota: €\(String(format: "%.2f", participant.entryFee))")
+//                            .foregroundColor(.blue)
+//                    }
+//                }
+//            }
             
             if !match.winners.isEmpty {
                 Divider().background(Color.gray)
@@ -102,7 +101,27 @@ struct MatchCard: View {
     }
 }
 
+#Preview {
+    MatchCard(
+        match: Match(
+            id: UUID(),
+            date: Date(),
+            participants: [
+                Participant(playerID: UUID(), entryFee: 50.0),
+                Participant(playerID: UUID(), entryFee: 50.0),
+                Participant(playerID: UUID(), entryFee: 50.0)
+            ], totalPrize: 150.0,
+            winners: [
+                Winner(playerID: UUID(), position: 1, amount: 100.0),
+                Winner(playerID: UUID(), position: 2, amount: 30.0),
+                Winner(playerID: UUID(), position: 3, amount: 20.0)
+            ]
+        ),
+        players: [
+            Player(id: UUID(), name: "Mario Rossi", nickname: "Mario", description: "aa"),
+            Player(id: UUID(), name: "Luca Bianchi", nickname: "Luca", description: "bb"),
+            Player(id: UUID(), name: "Giulia Verdi", nickname: "Giulia", description: "cc")
+        ]
+    )
+}
 
-//#Preview {
-//    MatchCard()
-//}

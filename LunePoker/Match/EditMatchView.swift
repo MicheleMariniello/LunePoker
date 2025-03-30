@@ -320,6 +320,31 @@ struct EditMatchView: View {
         players.first { $0.id == id }
     }
 }
-//#Preview {
-//    EditMatchView()
-//}
+
+#Preview {
+    let samplePlayers = [
+        Player(id: UUID(), name: "Luca", nickname: "Lucky", description: "aa"),
+        Player(id: UUID(), name: "Marco", nickname: "Ace", description: "bb"),
+        Player(id: UUID(), name: "Giulia", nickname: "Queen", description: "cc")
+    ]
+
+    let sampleMatch = Match(
+        id: UUID(),
+        date: Date(),
+        participants: [
+            Participant(playerID: samplePlayers[0].id, entryFee: 10),
+            Participant(playerID: samplePlayers[1].id, entryFee: 15)
+        ],
+        totalPrize: 25,
+        winners: [
+            Winner(playerID: samplePlayers[0].id, position: 1, amount: 15),
+            Winner(playerID: samplePlayers[1].id, position: 2, amount: 10)
+        ]
+    )
+
+    EditMatchView(
+        match: sampleMatch,
+        saveChanges: { _ in },
+        players: samplePlayers
+    )
+}

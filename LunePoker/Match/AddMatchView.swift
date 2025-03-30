@@ -52,9 +52,9 @@ struct AddMatchView: View {
                                 VStack(alignment: .leading) {
                                     Text(player.name)
                                         .font(.headline)
-                                    Text(player.nickname)
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
+//                                    Text(player.nickname)
+//                                        .font(.subheadline)
+//                                        .foregroundColor(.secondary)
                                 }
                                 
                                 Spacer()
@@ -120,13 +120,10 @@ struct AddMatchView: View {
                         ForEach(selectedParticipants) { participant in
                             if let player = playerByID(participant.playerID) {
                                 HStack {
-                                    VStack(alignment: .leading) {
+//                                    VStack(alignment: .leading) {
                                         Text(player.name)
                                             .font(.headline)
-//                                        Text(player.nickname)
-//                                            .font(.subheadline)
-//                                            .foregroundColor(.secondary)
-                                    }
+//                                    }
                                     
                                     Spacer()
                                     
@@ -307,21 +304,14 @@ struct AddMatchView: View {
     }
 }
 
-struct EditMatchView_Previews: PreviewProvider {
-    static var previews: some View {
-        let samplePlayers = [
-            Player(id: UUID(), name: "Mario Rossi", nickname: "SuperMario", description: "String"),
-            Player(id: UUID(), name: "Luigi Bianchi", nickname: "GreenLuigi", description: "String")
+#Preview {
+    AddMatchView(
+        isPresented: .constant(true),
+        saveMatch: { _, _, _ in },
+        players: [
+            Player(id: UUID(), name: "Mario Rossi", nickname: "Marr", description: "Ho 20 anni"),
+            Player(id: UUID(), name: "Luca Bianchi", nickname: "Marr", description: "Ho 20 anni"),
+            Player(id: UUID(), name: "Giulia Verdi", nickname: "Marr", description: "Ho 20 anni")
         ]
-        
-        let sampleMatch = Match(
-            id: UUID(),
-            date: Date(),
-            participants: [Participant(playerID: samplePlayers[0].id, entryFee: 10.0)],
-            totalPrize: 10.0,
-            winners: []
-        )
-        
-        return EditMatchView(match: sampleMatch, saveChanges: { _ in }, players: samplePlayers)
-    }
+    )
 }
