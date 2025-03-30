@@ -11,6 +11,7 @@ import SwiftUI
 struct MatchCard: View {
     let match: Match
     let players: [Player]
+//    var numberOfPlayers: Int { players.count }
     
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
