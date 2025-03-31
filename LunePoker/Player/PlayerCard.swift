@@ -27,13 +27,28 @@ struct PlayerCard: View {
                     )
                 )
 
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 8) {
+                // Mostra le carte selezionate
+                HStack {
+                    Spacer()
+                    Image(player.SelectedCard1)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 40, height: 60)
+                    Image(player.SelectedCard2)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 40, height: 60)
+                    Spacer()
+                }
                 Text("\(player.name) (\(player.nickname))")
                     .font(.headline)
                     .foregroundColor(.white)
                 Text(player.description)
                     .font(.subheadline)
                     .foregroundColor(.white.opacity(0.8))
+
+
             }
             .padding()
         }
@@ -44,6 +59,7 @@ struct PlayerCard: View {
 }
 
 
+
 #Preview {
-    PlayerCard(player: Player(id: UUID(), name: "Michele Mariniello", nickname: "Turbo", description: "o fortin"))
+    PlayerCard(player: Player(id: UUID(), name: "Michele Mariniello", nickname: "Turbo", description: "o fortin", SelectedCard1: "AH", SelectedCard2: "AS"))
 }

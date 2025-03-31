@@ -12,6 +12,8 @@ struct Player: Identifiable, Codable {
     var name: String
     var nickname: String
     var description: String
+    var SelectedCard1: String
+    var SelectedCard2: String
 }
 
 struct PlayerView: View {
@@ -67,11 +69,12 @@ struct PlayerView: View {
 
 
     // Funzione per aggiungere un nuovo giocatore
-    private func addPlayer(name: String, nickname: String, description: String) {
-        let newPlayer = Player(id: UUID(), name: name, nickname: nickname, description: description)
+    private func addPlayer(name: String, nickname: String, description: String, card1: String, card2: String) {
+        let newPlayer = Player(id: UUID(), name: name, nickname: nickname, description: description, SelectedCard1: card1, SelectedCard2: card2)
         players.append(newPlayer)
         savePlayers()
     }
+
 
     // Funzione per aggiornare un giocatore
     private func updatePlayer(updatedPlayer: Player) {

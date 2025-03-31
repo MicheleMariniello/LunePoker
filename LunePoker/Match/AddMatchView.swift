@@ -309,9 +309,9 @@ struct AddMatchView: View {
         isPresented: .constant(true),
         saveMatch: { _, _, _ in },
         players: [
-            Player(id: UUID(), name: "Mario Rossi", nickname: "Marr", description: "Ho 20 anni"),
-            Player(id: UUID(), name: "Luca Bianchi", nickname: "Marr", description: "Ho 20 anni"),
-            Player(id: UUID(), name: "Giulia Verdi", nickname: "Marr", description: "Ho 20 anni")
+            Player(id: UUID(), name: "Mario Rossi", nickname: "Marr", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS"),
+            Player(id: UUID(), name: "Luca Bianchi", nickname: "Marr", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS"),
+            Player(id: UUID(), name: "Giulia Verdi", nickname: "Marr", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS")
         ]
     )
 }

@@ -118,9 +118,9 @@ struct MatchCard: View {
             ]
         ),
         players: [
-            Player(id: UUID(), name: "Mario Rossi", nickname: "Mario", description: "aa"),
-            Player(id: UUID(), name: "Luca Bianchi", nickname: "Luca", description: "bb"),
-            Player(id: UUID(), name: "Giulia Verdi", nickname: "Giulia", description: "cc")
+            Player(id: UUID(), name: "Mario Rossi", nickname: "Mario", description: "aa", SelectedCard1: "AS", SelectedCard2: "KS"),
+            Player(id: UUID(), name: "Luca Bianchi", nickname: "Luca", description: "bb", SelectedCard1: "AS", SelectedCard2: "KS"),
+            Player(id: UUID(), name: "Giulia Verdi", nickname: "Giulia", description: "cc", SelectedCard1: "AS", SelectedCard2: "KS")
         ]
     )
 }

@@ -323,9 +323,9 @@ struct EditMatchView: View {
 
 #Preview {
     let samplePlayers = [
-        Player(id: UUID(), name: "Luca", nickname: "Lucky", description: "aa"),
-        Player(id: UUID(), name: "Marco", nickname: "Ace", description: "bb"),
-        Player(id: UUID(), name: "Giulia", nickname: "Queen", description: "cc")
+        Player(id: UUID(), name: "Luca", nickname: "Lucky", description: "aa", SelectedCard1: "AS", SelectedCard2: "KS"),
+        Player(id: UUID(), name: "Marco", nickname: "Ace", description: "bb", SelectedCard1: "AS", SelectedCard2: "KS"),
+        Player(id: UUID(), name: "Giulia", nickname: "Queen", description: "cc", SelectedCard1: "AS", SelectedCard2: "KS")
     ]
 
     let sampleMatch = Match(

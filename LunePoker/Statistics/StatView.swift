@@ -307,9 +307,9 @@ struct StatView: View {
 
 #Preview {
     let samplePlayers = [
-        Player(id: UUID(), name: "Alice", nickname: "Ali", description: "aa"),
-        Player(id: UUID(), name: "Bob", nickname: "olone", description: "aa"),
-        Player(id: UUID(), name: "Charlie", nickname: "chaplin", description: "aa")
+        Player(id: UUID(), name: "Alice", nickname: "Ali", description: "aa", SelectedCard1: "AS", SelectedCard2: "KS"),
+        Player(id: UUID(), name: "Bob", nickname: "olone", description: "aa", SelectedCard1: "AS", SelectedCard2: "KS"),
+        Player(id: UUID(), name: "Charlie", nickname: "chaplin", description: "aa", SelectedCard1: "AS", SelectedCard2: "KS")
     ]
     
     let sampleMatches = [

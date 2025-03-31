@@ -15,6 +15,8 @@ struct EditPlayerView: View {
     @State private var name: String
     @State private var nickname: String
     @State private var description: String
+    @State private var selectedCard1 = ""
+    @State private var selectedCard2 = ""
 
     init(player: Player, saveChanges: @escaping (Player) -> Void) {
         self.player = player
@@ -42,7 +44,7 @@ struct EditPlayerView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
-                        let updatedPlayer = Player(id: player.id, name: name, nickname: nickname, description: description)
+                        let updatedPlayer = Player(id: player.id, name: name, nickname: nickname, description: description, SelectedCard1: selectedCard1, SelectedCard2: selectedCard2)
                         saveChanges(updatedPlayer)
                         presentationMode.wrappedValue.dismiss()
                     }
@@ -54,5 +56,5 @@ struct EditPlayerView: View {
 }
 
 #Preview {
-    EditPlayerView(player: Player(id: UUID(), name: "mike", nickname: "turbo", description: "o fottissim"), saveChanges: {_ in})
+    EditPlayerView(player: Player(id: UUID(), name: "mike", nickname: "turbo", description: "o fottissim", SelectedCard1: "AS", SelectedCard2: "KS"), saveChanges: {_ in})
 }
