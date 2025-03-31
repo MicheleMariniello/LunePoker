@@ -10,6 +10,14 @@ import SwiftUI
 struct ContentView: View {
     @State private var selectedTab = 0
     
+    // Accedi agli stessi AppStorage usati in MatchView
+    @AppStorage("players") private var playersData: Data = Data()
+    @AppStorage("matches") private var matchesData: Data = Data()
+    
+    // Stati per memorizzare i dati decodificati
+    @State private var players: [Player] = []
+    @State private var matches: [Match] = []
+    
     var body: some View {
         TabView(selection: $selectedTab) {
             MatchView()
@@ -24,11 +32,25 @@ struct ContentView: View {
                 }
                 .tag(1)
             
-            StatView()
+            StatView(players: players, matches: matches)
                 .tabItem {
                     Label("Statistics", systemImage: "chart.bar.fill")
                 }
                 .tag(2)
+        }
+        .onAppear {
+            loadData()
+        }
+    }
+    
+    // Funzione per caricare i dati da AppStorage
+    private func loadData() {
+        do {
+            let decoder = JSONDecoder()
+            players = try decoder.decode([Player].self, from: playersData)
+            matches = try decoder.decode([Match].self, from: matchesData)
+        } catch {
+            print("Failed to load data in ContentView: \(error)")
         }
     }
 }
