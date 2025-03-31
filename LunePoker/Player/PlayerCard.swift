@@ -30,7 +30,6 @@ struct PlayerCard: View {
             VStack(alignment: .leading, spacing: 8) {
                 // Mostra le carte selezionate
                 HStack {
-                    Spacer()
                     Image(player.SelectedCard1)
                         .resizable()
                         .scaledToFit()

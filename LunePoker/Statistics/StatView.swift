@@ -57,20 +57,24 @@ struct StatView: View {
                 VStack {
                     // Selettori per filtri e ordinamento
                     VStack(spacing: 10) {
-                        Picker("Statistica", selection: $selectedStatistic) {
-                            ForEach(StatisticType.allCases) { statType in
-                                Text(statType.rawValue).tag(statType)
+
+                        
+                        Picker("Periodo", selection: $periodFilter) {
+                            ForEach(PeriodFilter.allCases) { period in
+                                Text(period.rawValue).tag(period)
                             }
                         }
                         .pickerStyle(MenuPickerStyle())
                         
                         HStack {
-                            Picker("Periodo", selection: $periodFilter) {
-                                ForEach(PeriodFilter.allCases) { period in
-                                    Text(period.rawValue).tag(period)
+                            
+                            Picker("Statistica", selection: $selectedStatistic) {
+                                ForEach(StatisticType.allCases) { statType in
+                                    Text(statType.rawValue).tag(statType)
                                 }
                             }
                             .pickerStyle(MenuPickerStyle())
+ 
                             
                             Spacer()
                             

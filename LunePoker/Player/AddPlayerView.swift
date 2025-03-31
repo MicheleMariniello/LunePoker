@@ -14,15 +14,15 @@ struct AddPlayerView: View {
     @State private var name = ""
     @State private var nickname = ""
     @State private var description = ""
-    @State private var selectedCard1 = ""
-    @State private var selectedCard2 = ""
+    
+    @State private var selectedCards: [String] = []
 
-    let suits = ["S", "H", "D", "C"] // Picche, Cuori, Quadri, Fiori
-    let ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+    let allCards = ["2H", "3H", "4H", "5H", "6H", "7H", "8H", "9H", "10H", "JH", "QH", "KH", "AH",
+                    "2C", "3C", "4C", "5C", "6C", "7C", "8C", "9C", "10C", "JC", "QC", "KC", "AC",
+                    "2D", "3D", "4D", "5D", "6D", "7D", "8D", "9D", "10D", "JD", "QD", "KD", "AD",
+                    "2S", "3S", "4S", "5S", "6S", "7S", "8S", "9S", "10S", "JS", "QS", "KS", "AS"]
 
-    var deck: [String] {
-        ranks.flatMap { rank in suits.map { suit in "\(rank)\(suit)" } }
-    }
+    let columns = [GridItem(.adaptive(minimum: 50))]
 
     var body: some View {
         NavigationView {
@@ -33,26 +33,19 @@ struct AddPlayerView: View {
                     TextField("Description", text: $description)
                 }
 
-                Section(header: Text("Favorite Hand")) {
-                    HStack {
-                        Picker("Card 1", selection: $selectedCard1) {
-                            ForEach(deck, id: \.self) { card in
-                                Text(card)
-                            }
+                Section(header: Text("Select Favorite Cards")) {
+                    LazyVGrid(columns: columns, spacing: 10) {
+                        ForEach(allCards, id: \.self) { card in
+                            Image(card)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 50, height: 70)
+                                .overlay(RoundedRectangle(cornerRadius: 5)
+                                    .stroke(selectedCards.contains(card) ? Color.green : Color.clear, lineWidth: 3))
+                                .onTapGesture {
+                                    selectCard(card)
+                                }
                         }
-                        .pickerStyle(MenuPickerStyle())
-
-                        Picker("Card 2", selection: $selectedCard2) {
-                            ForEach(deck, id: \.self) { card in
-                                Text(card)
-                            }
-                        }
-                        .pickerStyle(MenuPickerStyle())
-                    }
-                    
-                    HStack {
-                        CardView(cardName: selectedCard1)
-                        CardView(cardName: selectedCard2)
                     }
                 }
             }
@@ -65,17 +58,27 @@ struct AddPlayerView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Add") {
-                        if !name.isEmpty && !nickname.isEmpty {
-                            savePlayer(name, nickname, description, selectedCard1, selectedCard2)
+                        if !name.isEmpty && !nickname.isEmpty && selectedCards.count == 2 {
+                            savePlayer(name, nickname, description, selectedCards[0], selectedCards[1])
                             isPresented = false
                         }
                     }
-                    .disabled(name.isEmpty || nickname.isEmpty)
+                    .disabled(name.isEmpty || nickname.isEmpty || selectedCards.count != 2)
                 }
             }
         }
     }
+
+    // Funzione per gestire la selezione delle carte
+    private func selectCard(_ card: String) {
+        if selectedCards.contains(card) {
+            selectedCards.removeAll { $0 == card }
+        } else if selectedCards.count < 2 {
+            selectedCards.append(card)
+        }
+    }
 }
+
 
 // View per mostrare l'immagine della carta
 struct CardView: View {
