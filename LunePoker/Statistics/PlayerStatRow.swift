@@ -53,9 +53,9 @@ struct PlayerStatRow: View {
             case .winRate:
                 Text("\(String(format: "%.1f", stat.winRate))%")
                     .foregroundColor(.purple)
-            case .averagePosition:
-                Text("\(String(format: "%.1f", stat.averagePosition))")
-                    .foregroundColor(.blue)
+//            case .averagePosition:
+//                Text("\(String(format: "%.1f", stat.averagePosition))")
+//                    .foregroundColor(.blue)
             case .biggestWin:
                 Text("€\(String(format: "%.2f", stat.biggestWin))")
                     .foregroundColor(.green)
@@ -64,6 +64,32 @@ struct PlayerStatRow: View {
     }
 }
 
-//#Preview {
-//    PlayerStatRow()
-//}
+
+struct PlayerStatRow_Previews: PreviewProvider {
+    static var previews: some View {
+        PlayerStatRow(
+            stat: StatView.PlayerStat(
+                player: Player(
+                    id: UUID(),  // Genera un UUID valido
+                    name: "Luca",
+                    nickname: "LuPo",
+                    description: "scarso",
+                    SelectedCard1: "AS",
+                    SelectedCard2: "AH"
+                ),
+                totalParticipations: 150, // Rimosso il cast inutile
+                totalWinnings: 200.0,
+                totalLosses: 50.0,
+                balance: 3.0,
+                firstPlaces: 5,
+                podiums: 10,
+                winRate: 30.0,
+//                averagePosition: 2.5,
+                biggestWin: 100.0
+            ),
+            statType: .totalBalance
+        )
+        .previewLayout(.sizeThatFits)
+        .padding()
+    }
+}

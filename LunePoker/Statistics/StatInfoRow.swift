@@ -23,7 +23,3 @@ struct StatInfoRow: View {
         }
     }
 }
-
-//#Preview {
-//    StatInfoRow(title: title, value: value)
-//}

@@ -24,7 +24,6 @@ struct StatView: View {
         case podiums = "Podi (top 3)"
         case participations = "Partecipazioni"
         case winRate = "% Vittorie"
-        case averagePosition = "Posizione media"
         case biggestWin = "Vincita più grande"
         
         var id: String { self.rawValue }
@@ -174,7 +173,6 @@ struct StatView: View {
         let firstPlaces: Int
         let podiums: Int
         let winRate: Double
-        let averagePosition: Double
         let biggestWin: Double
         
         var id: UUID { player.id }
@@ -204,7 +202,6 @@ struct StatView: View {
                     if winner.amount > biggestWin {
                         biggestWin = winner.amount
                     }
-                    
                     // Conteggio posizionamenti
                     if winner.position == 1 {
                         firstPlaces += 1
@@ -212,7 +209,6 @@ struct StatView: View {
                     if winner.position <= 3 {
                         podiums += 1
                     }
-                    
                     positions.append(winner.position)
                 }
             }
@@ -224,10 +220,7 @@ struct StatView: View {
                 }
                 return total
             }
-            let totalLosses = totalEntryFees - totalWinnings
-            
-            // Calcolo posizione media
-            let averagePosition = positions.isEmpty ? 0 : Double(positions.reduce(0, +)) / Double(positions.count)
+            let totalLosses = totalEntryFees /*- totalWinnings*/
             
             // Calcolo percentuale vittorie
             let winRate = totalParticipations > 0 ? (Double(firstPlaces) / Double(totalParticipations)) * 100 : 0
@@ -241,7 +234,6 @@ struct StatView: View {
                 firstPlaces: firstPlaces,
                 podiums: podiums,
                 winRate: winRate,
-                averagePosition: averagePosition,
                 biggestWin: biggestWin
             )
         }
@@ -280,19 +272,6 @@ struct StatView: View {
             return sortOrder == .descending
             ? filteredStats.sorted { $0.winRate > $1.winRate }
             : filteredStats.sorted { $0.winRate < $1.winRate }
-        case .averagePosition:
-            return sortOrder == .descending
-            ? filteredStats.sorted {
-                // Per la posizione media, l'ordinamento è invertito (una posizione più bassa è migliore)
-                if $0.averagePosition == 0 && $1.averagePosition > 0 { return false }
-                if $1.averagePosition == 0 && $0.averagePosition > 0 { return true }
-                return $0.averagePosition > $1.averagePosition
-            }
-            : filteredStats.sorted {
-                if $0.averagePosition == 0 && $1.averagePosition > 0 { return true }
-                if $1.averagePosition == 0 && $0.averagePosition > 0 { return false }
-                return $0.averagePosition < $1.averagePosition
-            }
         case .biggestWin:
             return sortOrder == .descending
             ? filteredStats.sorted { $0.biggestWin > $1.biggestWin }

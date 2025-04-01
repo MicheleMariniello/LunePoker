@@ -4,7 +4,7 @@
 //
 //  Created by Michele Mariniello on 25/03/25.
 //
-
+//.multilineTextAlignment(.center)
 import SwiftUI
 
 struct Player: Identifiable, Codable {
@@ -28,32 +28,46 @@ struct PlayerView: View {
             ZStack {
                 Color.black.edgesIgnoringSafeArea(.all)
                 
-                ScrollView {
-                    LazyVStack(spacing: 15) {
-                        ForEach(players) { player in
-                            PlayerCard(player: player)
-                                .onTapGesture {
-                                    selectedPlayer = player
-                                }
-                                .contextMenu {
-                                    Button(role: .destructive) {
-                                        removePlayer(player)
-                                    } label: {
-                                        Label("Delete", systemImage: "trash")
-                                    }
-                                }
+                VStack(spacing: 0) {
+                    // Header personalizzato al posto della navigation bar
+                    HStack {
+                        Spacer()
+                        Text("Players")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                        
+                        Spacer()
+                        
+                        Button(action: { isAddingPlayer = true }) {
+                            Image(systemName: "plus")
+                                .foregroundColor(.blue)
                         }
                     }
                     .padding()
-                }
-                .navigationTitle("Players")
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: { isAddingPlayer = true }) {
-                            Image(systemName: "plus")
+                    
+                    // Contenuto principale
+                    ScrollView {
+                        LazyVStack(spacing: 15) {
+                            ForEach(players) { player in
+                                PlayerCard(player: player)
+                                    .onTapGesture {
+                                        selectedPlayer = player
+                                    }
+                                    .contextMenu {
+                                        Button(role: .destructive) {
+                                            removePlayer(player)
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
+                                    }
+                            }
                         }
+                        .padding()
                     }
                 }
+                
+                // Questi sheet rimangono invariati
                 .sheet(isPresented: $isAddingPlayer) {
                     AddPlayerView(isPresented: $isAddingPlayer, savePlayer: addPlayer)
                 }
@@ -61,12 +75,12 @@ struct PlayerView: View {
                     EditPlayerView(player: player, saveChanges: updatePlayer)
                 }
             }
+            .navigationBarHidden(true) // Nascondi completamente la barra di navigazione
         }
         .onAppear {
             loadPlayers()
         }
     }
-
 
     // Funzione per aggiungere un nuovo giocatore
     private func addPlayer(name: String, nickname: String, description: String, card1: String, card2: String) {
@@ -74,7 +88,6 @@ struct PlayerView: View {
         players.append(newPlayer)
         savePlayers()
     }
-
 
     // Funzione per aggiornare un giocatore
     private func updatePlayer(updatedPlayer: Player) {
@@ -110,8 +123,7 @@ struct PlayerView: View {
             print("Failed to load players: \(error)")
         }
     }
-}
-
+}//End Struct
 
 #Preview {
     PlayerView()
