@@ -15,9 +15,10 @@ struct StatInfoRow: View {
     var body: some View {
         HStack {
             Text(title)
-                .foregroundColor(.secondary)
+                .foregroundColor(.white)
             Spacer()
             Text(value)
+                .foregroundColor(.white)
                 .font(.system(.body, design: .monospaced))
                 .fontWeight(.medium)
         }

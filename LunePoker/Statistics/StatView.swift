@@ -50,14 +50,18 @@ struct StatView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color(UIColor.systemBackground)
-                    .edgesIgnoringSafeArea(.all)
+                // Background nero per tutta la vista
+                Color.black.edgesIgnoringSafeArea(.all)
                 
                 VStack {
+                    Text("Statistics")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding()
+                    
                     // Selettori per filtri e ordinamento
                     VStack(spacing: 10) {
-
-                        
                         Picker("Periodo", selection: $periodFilter) {
                             ForEach(PeriodFilter.allCases) { period in
                                 Text(period.rawValue).tag(period)
@@ -66,14 +70,12 @@ struct StatView: View {
                         .pickerStyle(MenuPickerStyle())
                         
                         HStack {
-                            
                             Picker("Statistica", selection: $selectedStatistic) {
                                 ForEach(StatisticType.allCases) { statType in
                                     Text(statType.rawValue).tag(statType)
                                 }
                             }
                             .pickerStyle(MenuPickerStyle())
- 
                             
                             Spacer()
                             
@@ -86,20 +88,20 @@ struct StatView: View {
                         }
                     }
                     .padding()
-                    .background(Color(UIColor.secondarySystemBackground))
+                    .background(Color(UIColor.systemGray6)) // Sfondo scuro per i picker
                     .cornerRadius(10)
                     .padding(.horizontal)
                     
                     if matches.isEmpty {
                         Spacer()
                         Text("Nessuna partita registrata")
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.gray)
                             .padding()
                         Spacer()
                     } else if filteredMatches.isEmpty {
                         Spacer()
                         Text("Nessun dato disponibile per il periodo selezionato")
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.gray)
                             .padding()
                         Spacer()
                     } else {
@@ -107,25 +109,40 @@ struct StatView: View {
                             Section(header:
                                         Text(selectedStatistic.rawValue)
                                 .font(.headline)
+                                .foregroundColor(.white)
                             ) {
                                 ForEach(sortedPlayerStats) { stat in
                                     PlayerStatRow(stat: stat, statType: selectedStatistic)
                                 }
                             }
                             
-                            Section(header: Text("Statistiche generali")) {
-                                StatInfoRow(title: "Totale partite", value: "\(filteredMatches.count)")
-                                StatInfoRow(title: "Montepremi totale", value: "€\(String(format: "%.2f", totalPrizePool))")
-                                if let lastMatch = filteredMatches.sorted(by: { $0.date > $1.date }).first {
-                                    StatInfoRow(title: "Ultima partita", value: dateFormatter.string(from: lastMatch.date))
+                            Section(header: Text("Statistiche generali")
+                                .foregroundColor(.white)) {
+                                    StatInfoRow(title: "Totale partite", value: "\(filteredMatches.count)")
+                                    StatInfoRow(title: "Montepremi totale", value: "€\(String(format: "%.2f", totalPrizePool))")
+                                    if let lastMatch = filteredMatches.sorted(by: { $0.date > $1.date }).first {
+                                        StatInfoRow(title: "Ultima partita", value: dateFormatter.string(from: lastMatch.date))
+                                    }
                                 }
-                            }
                         }
                         .listStyle(InsetGroupedListStyle())
+                        // Personalizzazione dello stile della lista per lo sfondo nero
+                        .onAppear {
+                            UITableView.appearance().backgroundColor = .black
+                            UITableViewCell.appearance().backgroundColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 1.0)
+                            
+                            // Per iOS 15+
+                            if #available(iOS 15.0, *) {
+                                UITableView.appearance().sectionHeaderTopPadding = 0
+                            }
+                        }
                     }
                 }
+                .foregroundColor(.white) // Imposta il colore del testo su bianco
             }
-            .navigationTitle("Statistiche")
+//            .navigationTitle("Statistiche")
+            .toolbarColorScheme(.dark, for: .navigationBar)
+            .preferredColorScheme(.dark)
         }
     }
     
@@ -178,7 +195,7 @@ struct StatView: View {
         var id: UUID { player.id }
     }
     
-    // Calcola statistiche per tutti i giocatori
+// MARK:     Calcola statistiche per tutti i giocatori
     var playerStats: [PlayerStat] {
         players.map { player in
             let playerMatches = filteredMatches.filter { match in
@@ -222,8 +239,8 @@ struct StatView: View {
             }
             let totalLosses = totalEntryFees /*- totalWinnings*/
             
-            // Calcolo percentuale vittorie
-            let winRate = totalParticipations > 0 ? (Double(firstPlaces) / Double(totalParticipations)) * 100 : 0
+            // MARK: Calcolo percentuale vittorie   CONTROLLARE
+            let winRate = totalParticipations > 0 ? (Double(firstPlaces) / Double(filteredMatches.count)) * 100 : 0
             
             return PlayerStat(
                 player: player,
@@ -300,13 +317,13 @@ struct StatView: View {
             Participant(playerID: samplePlayers[0].id, entryFee: 10),
             Participant(playerID: samplePlayers[1].id, entryFee: 15),
             Participant(playerID: samplePlayers[2].id, entryFee: 20)], totalPrize: 100,
-            winners: [Winner(playerID: samplePlayers[0].id, position: 1, amount: 50)
+              winners: [Winner(playerID: samplePlayers[0].id, position: 1, amount: 50)
                        ]),
         Match(id: UUID(), date: Date().addingTimeInterval(-86400), participants: [
             Participant(playerID: samplePlayers[0].id, entryFee: 10),
             Participant(playerID: samplePlayers[1].id, entryFee: 15)], totalPrize: 80,
-            winners: [Winner(playerID: samplePlayers[1].id, position: 1, amount: 40)
-                     ])
+              winners: [Winner(playerID: samplePlayers[1].id, position: 1, amount: 40)
+                       ])
     ]
     
     StatView(players: samplePlayers, matches: sampleMatches)

@@ -39,6 +39,19 @@ struct ContentView: View {
                 .tag(2)
         }
         .onAppear {
+            // Configurazione per eliminare la barra grigia
+            let tabBarAppearance = UITabBarAppearance()
+            tabBarAppearance.configureWithOpaqueBackground()
+            tabBarAppearance.backgroundColor = UIColor.black
+            
+            // Rimuove la linea separatrice in alto
+            tabBarAppearance.shadowColor = UIColor.clear
+            
+            UITabBar.appearance().standardAppearance = tabBarAppearance
+            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+            
+            
+            UITabBar.appearance().unselectedItemTintColor = UIColor.gray
             loadData()
         }
     }

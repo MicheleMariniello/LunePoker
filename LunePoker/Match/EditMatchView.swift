@@ -61,11 +61,11 @@ struct EditMatchView: View {
                         ForEach(players) { player in
                             HStack {
                                 VStack(alignment: .leading) {
-                                    Text(player.name)
-                                        .font(.headline)
                                     Text(player.nickname)
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
+                                        .font(.headline)
+//                                    Text(player.nickname)
+//                                        .font(.subheadline)
+//                                        .foregroundColor(.secondary)
                                 }
                                 
                                 Spacer()
@@ -83,7 +83,7 @@ struct EditMatchView: View {
                                     .buttonStyle(BorderlessButtonStyle())
                                     
                                     Text("€\(String(format: "%.2f", selectedParticipants[index].entryFee))")
-                                        .frame(width: 60)
+                                        .frame(width: 70)
                                     
                                     // Pulsante +
                                     Button {
@@ -132,11 +132,11 @@ struct EditMatchView: View {
                             if let player = playerByID(participant.playerID) {
                                 HStack {
                                     VStack(alignment: .leading) {
-                                        Text(player.name)
-                                            .font(.headline)
                                         Text(player.nickname)
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
+                                            .font(.headline)
+//                                        Text(player.nickname)
+//                                            .font(.subheadline)
+//                                            .foregroundColor(.secondary)
                                     }
                                     
                                     Spacer()
@@ -165,7 +165,7 @@ struct EditMatchView: View {
                                             .buttonStyle(BorderlessButtonStyle())
                                             
                                             Text("€\(String(format: "%.2f", winners[winnerIndex].amount))")
-                                                .frame(width: 60)
+                                                .frame(width: 70)
                                             
                                             // Pulsante +
                                             Button {

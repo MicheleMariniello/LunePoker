@@ -50,7 +50,7 @@ struct AddMatchView: View {
                         ForEach(players) { player in
                             HStack {
                                 VStack(alignment: .leading) {
-                                    Text(player.name)
+                                    Text(player.nickname)
                                         .font(.headline)
 //                                    Text(player.nickname)
 //                                        .font(.subheadline)
@@ -72,7 +72,7 @@ struct AddMatchView: View {
                                     .buttonStyle(BorderlessButtonStyle())
                                     
                                     Text("€\(String(format: "%.2f", selectedParticipants[index].entryFee))")
-                                        .frame(width: 60)
+                                        .frame(width: 70)
                                     
                                     // Pulsante +
                                     Button {
@@ -119,71 +119,76 @@ struct AddMatchView: View {
                     Section(header: Text("Vincitori e posizionamenti")) {
                         ForEach(selectedParticipants) { participant in
                             if let player = playerByID(participant.playerID) {
-                                HStack {
-//                                    VStack(alignment: .leading) {
-                                        Text(player.name)
-                                            .font(.headline)
-//                                    }
+                                
+                                VStack{
                                     
-                                    Spacer()
+                                    Text(player.nickname)
+                                        .font(.headline)
+                                        .padding(.bottom, 5)
                                     
-                                    if let winnerIndex = winners.firstIndex(where: { $0.playerID == participant.playerID }) {
-                                        HStack {
-                                            Picker("", selection: Binding(
-                                                get: { winners[winnerIndex].position },
-                                                set: { winners[winnerIndex].position = $0 }
-                                            )) {
-                                                ForEach(1...selectedParticipants.count, id: \.self) { position in
-                                                    Text("\(position)°").tag(position)
+                                    HStack {
+                                        Spacer()
+                                        
+                                        if let winnerIndex = winners.firstIndex(where: { $0.playerID == participant.playerID }) {
+                                            HStack {
+                                                Picker("", selection: Binding(
+                                                    get: { winners[winnerIndex].position },
+                                                    set: { winners[winnerIndex].position = $0 }
+                                                )) {
+                                                    ForEach(1...selectedParticipants.count, id: \.self) { position in
+                                                        Text("\(position)°").tag(position)
+                                                    }
                                                 }
-                                            }
-                                            .frame(width: 60)
-                                            
-                                            // Pulsante -
-                                            Button {
-                                                decrementWinningAmount(at: winnerIndex)
-                                            } label: {
-                                                Image(systemName: "minus.circle.fill")
-                                                    .foregroundColor(.red)
-                                                    .frame(width: 44, height: 44)
-                                                    .contentShape(Rectangle())
-                                            }
-                                            .buttonStyle(BorderlessButtonStyle())
-                                            
-                                            Text("€\(String(format: "%.2f", winners[winnerIndex].amount))")
                                                 .frame(width: 60)
-                                            
-                                            // Pulsante +
-                                            Button {
-                                                incrementWinningAmount(at: winnerIndex)
-                                            } label: {
-                                                Image(systemName: "plus.circle.fill")
-                                                    .foregroundColor(.green)
-                                                    .frame(width: 44, height: 44)
-                                                    .contentShape(Rectangle())
+                                                
+                                                // Pulsante -
+                                                Button {
+                                                    decrementWinningAmount(at: winnerIndex)
+                                                } label: {
+                                                    Image(systemName: "minus.circle.fill")
+                                                        .foregroundColor(.red)
+                                                        .frame(width: 44, height: 44)
+                                                        .contentShape(Rectangle())
+                                                }
+                                                .buttonStyle(BorderlessButtonStyle())
+                                                
+                                                Text("€\(String(format: "%.2f", winners[winnerIndex].amount))")
+                                                    .frame(width: 70)
+                                                
+                                                // Pulsante +
+                                                Button {
+                                                    incrementWinningAmount(at: winnerIndex)
+                                                } label: {
+                                                    Image(systemName: "plus.circle.fill")
+                                                        .foregroundColor(.green)
+                                                        .frame(width: 44, height: 44)
+                                                        .contentShape(Rectangle())
+                                                }
+                                                .buttonStyle(BorderlessButtonStyle())
+                                                Spacer()
+                                                // Pulsante rimuovi
+                                                Button {
+                                                    winners.remove(at: winnerIndex)
+                                                } label: {
+                                                    Image(systemName: "xmark.circle.fill")
+                                                        .foregroundColor(.red)
+                                                        .frame(width: 44, height: 44)
+                                                        .contentShape(Rectangle())
+                                                }
+                                                .buttonStyle(BorderlessButtonStyle())
                                             }
-                                            .buttonStyle(BorderlessButtonStyle())
-                                            
-                                            // Pulsante rimuovi
+                                        } else {
                                             Button {
-                                                winners.remove(at: winnerIndex)
+                                                addWinner(participant.playerID)
                                             } label: {
-                                                Image(systemName: "xmark.circle.fill")
-                                                    .foregroundColor(.red)
-                                                    .frame(width: 44, height: 44)
-                                                    .contentShape(Rectangle())
+                                                Text("Aggiungi come vincitore")
+                                                    .foregroundColor(.blue)
+                                                    .multilineTextAlignment(.center)
                                             }
                                             .buttonStyle(BorderlessButtonStyle())
                                         }
-                                    } else {
-                                        Button {
-                                            addWinner(participant.playerID)
-                                        } label: {
-                                            Text("Aggiungi vincitore")
-                                                .foregroundColor(.blue)
-                                        }
-                                        .buttonStyle(BorderlessButtonStyle())
-                                    }
+                                        Spacer()
+                                    }//EndHStack
                                 }
                             }
                         }
@@ -229,12 +234,12 @@ struct AddMatchView: View {
                         return
                     }
                     
-                    // Controlla posizioni duplicate
-                    let positions = winners.map { $0.position }
-                    if Set(positions).count != positions.count {
-                        errorMessage = "Ci sono posizioni duplicate tra i vincitori."
-                        return
-                    }
+//                    // Controlla posizioni duplicate
+//                    let positions = winners.map { $0.position }
+//                    if Set(positions).count != positions.count {
+//                        errorMessage = "Ci sono posizioni duplicate tra i vincitori."
+//                        return
+//                    }
                     
                     saveMatch(
                         matchDate,
@@ -310,8 +315,8 @@ struct AddMatchView: View {
         saveMatch: { _, _, _ in },
         players: [
             Player(id: UUID(), name: "Mario Rossi", nickname: "Marr", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS"),
-            Player(id: UUID(), name: "Luca Bianchi", nickname: "Marr", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS"),
-            Player(id: UUID(), name: "Giulia Verdi", nickname: "Marr", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS")
+            Player(id: UUID(), name: "Luca Bianchi", nickname: "Zrro", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS"),
+            Player(id: UUID(), name: "Giulia Verdi", nickname: "fghj", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS")
         ]
     )
 }

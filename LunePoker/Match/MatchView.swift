@@ -46,7 +46,8 @@ struct MatchView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color.black.edgesIgnoringSafeArea(.all)
+                Color.black
+                    .ignoresSafeArea(.all)
                 
                 VStack(spacing: 0) {
                     HStack {
