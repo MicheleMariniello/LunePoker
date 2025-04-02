@@ -41,6 +41,7 @@ struct PlayerView: View {
                         
                         Button(action: { isAddingPlayer = true }) {
                             Image(systemName: "plus")
+                                .font(.title2)
                                 .foregroundColor(.blue)
                         }
                     }

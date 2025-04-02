@@ -48,31 +48,50 @@ struct MatchView: View {
             ZStack {
                 Color.black.edgesIgnoringSafeArea(.all)
                 
-                ScrollView {
-                    LazyVStack(spacing: 15) {
-                        ForEach(matches.sorted(by: { $0.date > $1.date })) { match in
-                            MatchCard(match: match, players: players)
-                                .onTapGesture {
-                                    selectedMatch = match
-                                }
-                                .contextMenu {
-                                    Button(role: .destructive) {
-                                        removeMatch(match)
-                                    } label: {
-                                        Label("Delete", systemImage: "trash")
-                                    }
-                                }
+                VStack(spacing: 0) {
+                    HStack {
+                        Spacer()
+                        Text("Poker Matches")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                        
+                        Spacer()
+                        
+                        Button(action: { isAddingMatch = true }) {
+                            Image(systemName: "plus")
+                                .font(.title2)
+                                .foregroundColor(.blue)
                         }
                     }
                     .padding()
-                }
-                .navigationTitle("Poker Matches")
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: { isAddingMatch = true }) {
-                            Image(systemName: "plus")
+                    
+                    ScrollView {
+                        LazyVStack(spacing: 15) {
+                            ForEach(matches.sorted(by: { $0.date > $1.date })) { match in
+                                MatchCard(match: match, players: players)
+                                    .onTapGesture {
+                                        selectedMatch = match
+                                    }
+                                    .contextMenu {
+                                        Button(role: .destructive) {
+                                            removeMatch(match)
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
+                                    }
+                            }
                         }
+                        .padding()
                     }
+                    //                .navigationTitle("Poker Matches")
+                    //                .toolbar {
+                    //                    ToolbarItem(placement: .navigationBarTrailing) {
+                    //                        Button(action: { isAddingMatch = true }) {
+                    //                            Image(systemName: "plus")
+                    //                        }
+                    //                    }
+                    //                }
                 }
                 .sheet(isPresented: $isAddingMatch) {
                     AddMatchView(isPresented: $isAddingMatch, saveMatch: addMatch, players: players)
