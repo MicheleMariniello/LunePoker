@@ -43,72 +43,130 @@ struct MatchView: View {
     @State private var isAddingMatch = false
     @State private var selectedMatch: Match?
     
+    // Stati per l'alert di conferma eliminazione
+    @State private var matchToDelete: Match?
+    @State private var showDeleteAlert = false
+    
     var body: some View {
-        NavigationView {
-            ZStack {
-                Color.black
-                    .ignoresSafeArea(.all)
-                
-                VStack(spacing: 0) {
-                    HStack {
-                        Spacer()
-                        Text("Poker Matches")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                        
-                        Spacer()
-                        
-                        Button(action: { isAddingMatch = true }) {
-                            Image(systemName: "plus")
-                                .font(.title2)
-                                .foregroundColor(.blue)
-                        }
-                    }
-                    .padding()
+        ZStack {
+            NavigationView {
+                ZStack {
+                    Color.black
+                        .ignoresSafeArea(.all)
                     
-                    ScrollView {
-                        LazyVStack(spacing: 15) {
-                            ForEach(matches.sorted(by: { $0.date > $1.date })) { match in
-                                MatchCard(match: match, players: players)
-                                    .onTapGesture {
-                                        selectedMatch = match
-                                    }
-                                    .contextMenu {
-                                        Button(role: .destructive) {
-                                            removeMatch(match)
-                                        } label: {
-                                            Label("Delete", systemImage: "trash")
-                                        }
-                                    }
+                    VStack(spacing: 0) {
+                        HStack {
+                            Spacer()
+                            Text("Poker Matches")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                            
+                            Spacer()
+                            
+                            Button(action: { isAddingMatch = true }) {
+                                Image(systemName: "plus")
+                                    .font(.title2)
+                                    .foregroundColor(.blue)
                             }
                         }
                         .padding()
+                        
+                        ScrollView {
+                            LazyVStack(spacing: 15) {
+                                ForEach(matches.sorted(by: { $0.date > $1.date })) { match in
+                                    MatchCard(match: match, players: players)
+                                        .onTapGesture {
+                                            selectedMatch = match
+                                        }
+                                        .contextMenu {
+                                            Button(role: .destructive) {
+                                                matchToDelete = match
+                                                showDeleteAlert = true
+                                            } label: {
+                                                Label("Delete", systemImage: "trash")
+                                            }
+                                        }
+                                }
+                            }
+                            .padding()
+                        }
                     }
-                    //                .navigationTitle("Poker Matches")
-                    //                .toolbar {
-                    //                    ToolbarItem(placement: .navigationBarTrailing) {
-                    //                        Button(action: { isAddingMatch = true }) {
-                    //                            Image(systemName: "plus")
-                    //                        }
-                    //                    }
-                    //                }
+                    .sheet(isPresented: $isAddingMatch) {
+                        AddMatchView(isPresented: $isAddingMatch, saveMatch: addMatch, players: players)
+                    }
+                    .sheet(item: $selectedMatch) { match in
+                        EditMatchView(match: match, saveChanges: updateMatch, players: players)
+                    }
                 }
-                .sheet(isPresented: $isAddingMatch) {
-                    AddMatchView(isPresented: $isAddingMatch, saveMatch: addMatch, players: players)
-                }
-                .sheet(item: $selectedMatch) { match in
-                    EditMatchView(match: match, saveChanges: updateMatch, players: players)
+                .navigationBarHidden(true)
+            }
+            .onAppear {
+                loadPlayers()
+                loadMatches()
+            }
+            
+            // Alert di conferma come overlay
+            if showDeleteAlert, let match = matchToDelete {
+                ZStack {
+                    Color.black.opacity(0.3)
+                        .edgesIgnoringSafeArea(.all)
+                        .onTapGesture {
+                            showDeleteAlert = false
+                            matchToDelete = nil
+                        }
+
+                    VStack {
+                        Text("Conferma eliminazione")
+                            .font(.headline)
+                            .padding()
+
+                        // Formattazione della data
+                        let dateFormatter: DateFormatter = {
+                            let formatter = DateFormatter()
+                            formatter.dateStyle = .medium
+                            return formatter
+                        }()
+                        
+                        let dateString = dateFormatter.string(from: match.date)
+                        
+                        Text("Sei sicuro di voler eliminare la partita del \(dateString)?")
+                            .padding(.horizontal)
+
+                        HStack {
+                            Button("Annulla") {
+                                showDeleteAlert = false
+                                matchToDelete = nil
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(8)
+
+                            Button("Elimina") {
+                                removeMatch(match)
+                                showDeleteAlert = false
+                                matchToDelete = nil
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.red)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                        }
+                        .padding()
+                    }
+                    .frame(width: 300)
+                    .background(Color.white)
+                    .cornerRadius(12)
+                    .shadow(radius: 10)
                 }
             }
-        }
-        .onAppear {
-            loadPlayers()
-            loadMatches()
+
         }
     }
     
-    // Funzione per aggiungere una nuova partita
+    // Il resto delle funzioni rimane invariato
     private func addMatch(date: Date, participants: [Participant], winners: [Winner]) {
         // Calcola il montepremi totale dalla somma delle quote di ingresso
         let totalPrize = participants.reduce(0) { $0 + $1.entryFee }
@@ -118,7 +176,6 @@ struct MatchView: View {
         saveMatches()
     }
     
-    // Funzione per aggiornare una partita
     private func updateMatch(updatedMatch: Match) {
         if let index = matches.firstIndex(where: { $0.id == updatedMatch.id }) {
             matches[index] = updatedMatch
@@ -126,13 +183,11 @@ struct MatchView: View {
         }
     }
     
-    // Funzione per rimuovere una partita
     private func removeMatch(_ match: Match) {
         matches.removeAll { $0.id == match.id }
         saveMatches()
     }
     
-    // Funzione per salvare le partite in AppStorage
     private func saveMatches() {
         do {
             let encoder = JSONEncoder()
@@ -143,7 +198,6 @@ struct MatchView: View {
         }
     }
     
-    // Funzione per caricare le partite da AppStorage
     private func loadMatches() {
         do {
             let decoder = JSONDecoder()
@@ -153,7 +207,6 @@ struct MatchView: View {
         }
     }
     
-    // Funzione per caricare i giocatori da AppStorage
     private func loadPlayers() {
         do {
             let decoder = JSONDecoder()

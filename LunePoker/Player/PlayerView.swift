@@ -22,64 +22,116 @@ struct PlayerView: View {
     @State private var players: [Player] = []
     @State private var isAddingPlayer = false
     @State private var selectedPlayer: Player?
+    @State private var playerToDelete: Player?
+    @State private var showDeleteAlert = false
 
     var body: some View {
-        NavigationView {
-            ZStack {
-                Color.black.edgesIgnoringSafeArea(.all)
-                
-                VStack(spacing: 0) {
-                    // Header personalizzato al posto della navigation bar
-                    HStack {
-                        Spacer()
-                        Text("Players")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                        
-                        Spacer()
-                        
-                        Button(action: { isAddingPlayer = true }) {
-                            Image(systemName: "plus")
-                                .font(.title2)
-                                .foregroundColor(.blue)
-                        }
-                    }
-                    .padding()
+        ZStack {
+            NavigationView {
+                ZStack {
+                    Color.black.edgesIgnoringSafeArea(.all)
                     
-                    // Contenuto principale
-                    ScrollView {
-                        LazyVStack(spacing: 15) {
-                            ForEach(players) { player in
-                                PlayerCard(player: player)
-                                    .onTapGesture {
-                                        selectedPlayer = player
-                                    }
-                                    .contextMenu {
-                                        Button(role: .destructive) {
-                                            removePlayer(player)
-                                        } label: {
-                                            Label("Delete", systemImage: "trash")
-                                        }
-                                    }
+                    VStack(spacing: 0) {
+                        // Header personalizzato
+                        HStack {
+                            Spacer()
+                            Text("Players")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                            
+                            Spacer()
+                            
+                            Button(action: { isAddingPlayer = true }) {
+                                Image(systemName: "plus")
+                                    .font(.title2)
+                                    .foregroundColor(.blue)
                             }
                         }
                         .padding()
+                        
+                        // Contenuto principale
+                        ScrollView {
+                            LazyVStack(spacing: 15) {
+                                ForEach(players.sorted(by: { $0.name < $1.name })) { player in
+                                    PlayerCard(player: player)
+                                        .onTapGesture {
+                                            selectedPlayer = player
+                                        }
+                                        .contextMenu {
+                                            Button(role: .destructive) {
+                                                playerToDelete = player
+                                                showDeleteAlert = true
+                                            } label: {
+                                                Label("Delete", systemImage: "trash")
+                                            }
+                                        }
+                                }
+                            }
+                            .padding()
+                        }
+                    }
+                    
+                    // Sheet invariati
+                    .sheet(isPresented: $isAddingPlayer) {
+                        AddPlayerView(isPresented: $isAddingPlayer, savePlayer: addPlayer)
+                    }
+                    .sheet(item: $selectedPlayer) { player in
+                        EditPlayerView(player: player, saveChanges: updatePlayer)
                     }
                 }
-                
-                // Questi sheet rimangono invariati
-                .sheet(isPresented: $isAddingPlayer) {
-                    AddPlayerView(isPresented: $isAddingPlayer, savePlayer: addPlayer)
-                }
-                .sheet(item: $selectedPlayer) { player in
-                    EditPlayerView(player: player, saveChanges: updatePlayer)
-                }
+                .navigationBarHidden(true)
             }
-            .navigationBarHidden(true) // Nascondi completamente la barra di navigazione
-        }
-        .onAppear {
-            loadPlayers()
+            .onAppear {
+                loadPlayers()
+            }
+            
+            // L'alert è ora un overlay su tutta la view
+            if showDeleteAlert, let player = playerToDelete {
+                Color.black.opacity(0.3)
+                    .edgesIgnoringSafeArea(.all)
+                    .onTapGesture {
+                        // Chiudi l'alert se si tocca fuori
+                        showDeleteAlert = false
+                        playerToDelete = nil
+                    }
+                
+                VStack {
+                    Text("Conferma eliminazione")
+                        .font(.headline)
+                        .padding()
+                    
+                    Text("Sei sicuro di voler eliminare \(player.name)?")
+                        .padding(.horizontal)
+                    
+                    HStack {
+                        Button("Annulla") {
+                            showDeleteAlert = false
+                            playerToDelete = nil
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(8)
+                        
+                        Button("Elimina") {
+                            removePlayer(player)
+                            showDeleteAlert = false
+                            playerToDelete = nil
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.red)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                    }
+                    .padding()
+                }
+                .frame(width: 300)
+                .background(Color.white)
+                .cornerRadius(12)
+                .shadow(radius: 10)
+            }
         }
     }
 
