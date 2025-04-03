@@ -4,7 +4,6 @@
 //
 //  Created by Michele Mariniello on 25/03/25.
 //
-
 import SwiftUI
 
 struct StatView: View {
@@ -140,7 +139,6 @@ struct StatView: View {
                 }
                 .foregroundColor(.white) // Imposta il colore del testo su bianco
             }
-//            .navigationTitle("Statistiche")
             .toolbarColorScheme(.dark, for: .navigationBar)
             .preferredColorScheme(.dark)
         }
@@ -237,7 +235,7 @@ struct StatView: View {
                 }
                 return total
             }
-            let totalLosses = totalEntryFees /*- totalWinnings*/
+            let totalLosses = totalEntryFees
             
             // MARK: Calcolo percentuale vittorie   CONTROLLARE
             let winRate = totalParticipations > 0 ? (Double(firstPlaces) / Double(filteredMatches.count)) * 100 : 0

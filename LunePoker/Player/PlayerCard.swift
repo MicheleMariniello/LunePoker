@@ -4,7 +4,6 @@
 //
 //  Created by Michele Mariniello on 25/03/25.
 //
-
 import SwiftUI
 
 struct PlayerCard: View {
@@ -56,8 +55,6 @@ struct PlayerCard: View {
         .shadow(radius: 4)
     }
 }
-
-
 
 #Preview {
     PlayerCard(player: Player(id: UUID(), name: "Michele Mariniello", nickname: "Turbo", description: "o fortin", SelectedCard1: "AH", SelectedCard2: "AS"))

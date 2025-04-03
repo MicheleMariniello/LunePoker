@@ -134,9 +134,6 @@ struct EditMatchView: View {
                                     VStack(alignment: .leading) {
                                         Text(player.nickname)
                                             .font(.headline)
-//                                        Text(player.nickname)
-//                                            .font(.subheadline)
-//                                            .foregroundColor(.secondary)
                                     }
                                     
                                     Spacer()

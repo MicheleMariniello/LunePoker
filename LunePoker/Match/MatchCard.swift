@@ -32,25 +32,6 @@ struct MatchCard: View {
                     .foregroundColor(.green)
             }
             
-//            Divider().background(Color.gray)
-            
-//            Text("Partecipanti:")
-//                .font(.subheadline)
-//                .foregroundColor(.gray)
-//            
-//            // Mostra i nomi dei partecipanti con le loro quote
-//            ForEach(match.participants) { participant in
-//                if let player = playerByID(participant.playerID) {
-//                    HStack {
-//                        Text(player.nickname)
-//                            .foregroundColor(.white)
-//                        Spacer()
-//                        Text("Quota: €\(String(format: "%.2f", participant.entryFee))")
-//                            .foregroundColor(.blue)
-//                    }
-//                }
-//            }
-            
             if !match.winners.isEmpty {
                 Divider().background(Color.gray)
                 

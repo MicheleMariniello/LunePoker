@@ -4,7 +4,6 @@
 //
 //  Created by Michele Mariniello on 31/03/25.
 //
-
 import SwiftUI
 
 // Riga personalizzata per mostrare le statistiche dei giocatori
@@ -53,9 +52,6 @@ struct PlayerStatRow: View {
             case .winRate:
                 Text("\(String(format: "%.1f", stat.winRate))%")
                     .foregroundColor(.purple)
-//            case .averagePosition:
-//                Text("\(String(format: "%.1f", stat.averagePosition))")
-//                    .foregroundColor(.blue)
             case .biggestWin:
                 Text("€\(String(format: "%.2f", stat.biggestWin))")
                     .foregroundColor(.green)
@@ -63,7 +59,6 @@ struct PlayerStatRow: View {
         }
     }
 }
-
 
 struct PlayerStatRow_Previews: PreviewProvider {
     static var previews: some View {
@@ -84,7 +79,6 @@ struct PlayerStatRow_Previews: PreviewProvider {
                 firstPlaces: 5,
                 podiums: 10,
                 winRate: 30.0,
-//                averagePosition: 2.5,
                 biggestWin: 100.0
             ),
             statType: .totalBalance

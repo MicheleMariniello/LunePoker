@@ -4,7 +4,6 @@
 //
 //  Created by Michele Mariniello on 25/03/25.
 //
-//.multilineTextAlignment(.center)
 import SwiftUI
 
 struct Player: Identifiable, Codable {

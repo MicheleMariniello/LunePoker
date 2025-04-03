@@ -79,7 +79,6 @@ struct AddPlayerView: View {
     }
 }
 
-
 // View per mostrare l'immagine della carta
 struct CardView: View {
     var cardName: String
@@ -91,8 +90,6 @@ struct CardView: View {
             .shadow(radius: 2)
     }
 }
-
-
 
 #Preview {
     @Previewable @State var isPresented = true

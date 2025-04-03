@@ -52,9 +52,6 @@ struct AddMatchView: View {
                                 VStack(alignment: .leading) {
                                     Text(player.nickname)
                                         .font(.headline)
-//                                    Text(player.nickname)
-//                                        .font(.subheadline)
-//                                        .foregroundColor(.secondary)
                                 }
                                 
                                 Spacer()
@@ -233,14 +230,6 @@ struct AddMatchView: View {
                         errorMessage = "Il totale delle vincite deve essere uguale al montepremi totale."
                         return
                     }
-                    
-//                    // Controlla posizioni duplicate
-//                    let positions = winners.map { $0.position }
-//                    if Set(positions).count != positions.count {
-//                        errorMessage = "Ci sono posizioni duplicate tra i vincitori."
-//                        return
-//                    }
-                    
                     saveMatch(
                         matchDate,
                         selectedParticipants,
