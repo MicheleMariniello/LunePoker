@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseDatabase
 
 // Definizione della struttura Match aggiornata
 struct Match: Identifiable, Codable {
@@ -47,6 +48,10 @@ struct MatchView: View {
     @State private var matchToDelete: Match?
     @State private var showDeleteAlert = false
     
+    // Stato per mostrare il caricamento
+    @State private var isLoading = false
+    @State private var initialLoadCompleted = false
+    
     var body: some View {
         ZStack {
             NavigationView {
@@ -72,24 +77,35 @@ struct MatchView: View {
                         }
                         .padding()
                         
-                        ScrollView {
-                            LazyVStack(spacing: 15) {
-                                ForEach(matches.sorted(by: { $0.date > $1.date })) { match in
-                                    MatchCard(match: match, players: players)
-                                        .onTapGesture {
-                                            selectedMatch = match
-                                        }
-                                        .contextMenu {
-                                            Button(role: .destructive) {
-                                                matchToDelete = match
-                                                showDeleteAlert = true
-                                            } label: {
-                                                Label("Delete", systemImage: "trash")
+                        if isLoading && !initialLoadCompleted {
+                            Spacer()
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                .scaleEffect(1.5)
+                            Text("Synchronizing matches...")
+                                .foregroundColor(.gray)
+                                .padding()
+                            Spacer()
+                        } else {
+                            ScrollView {
+                                LazyVStack(spacing: 15) {
+                                    ForEach(matches.sorted(by: { $0.date > $1.date })) { match in
+                                        MatchCard(match: match, players: players)
+                                            .onTapGesture {
+                                                selectedMatch = match
                                             }
-                                        }
+                                            .contextMenu {
+                                                Button(role: .destructive) {
+                                                    matchToDelete = match
+                                                    showDeleteAlert = true
+                                                } label: {
+                                                    Label("Delete", systemImage: "trash")
+                                                }
+                                            }
+                                    }
                                 }
+                                .padding()
                             }
-                            .padding()
                         }
                     }
                     .sheet(isPresented: $isAddingMatch) {
@@ -103,7 +119,13 @@ struct MatchView: View {
             }
             .onAppear {
                 loadPlayers()
-                loadMatches()
+                if !initialLoadCompleted {
+                    loadMatches()
+                }
+                setupMatchesObserver()
+            }
+            .onDisappear {
+                // Non è necessario rimuovere osservatori qui poiché è gestito a livello di app
             }
             
             // Alert di conferma come overlay
@@ -162,48 +184,100 @@ struct MatchView: View {
                     .shadow(radius: 10)
                 }
             }
-
         }
     }
     
-    // Il resto delle funzioni rimane invariato
+    // Il resto delle funzioni rimane invariato ma aggiornato per Firebase
     private func addMatch(date: Date, participants: [Participant], winners: [Winner]) {
         // Calcola il montepremi totale dalla somma delle quote di ingresso
         let totalPrize = participants.reduce(0) { $0 + $1.entryFee }
         
         let newMatch = Match(id: UUID(), date: date, participants: participants, totalPrize: totalPrize, winners: winners)
         matches.append(newMatch)
-        saveMatches()
+        saveMatchesToFirebase()
     }
     
     private func updateMatch(updatedMatch: Match) {
         if let index = matches.firstIndex(where: { $0.id == updatedMatch.id }) {
             matches[index] = updatedMatch
-            saveMatches()
+            saveMatchesToFirebase()
         }
     }
     
     private func removeMatch(_ match: Match) {
         matches.removeAll { $0.id == match.id }
-        saveMatches()
+        saveMatchesToFirebase()
     }
     
-    private func saveMatches() {
+    private func saveMatchesToFirebase() {
+        isLoading = true
+        FirebaseManager.shared.saveMatches(matches) { error in
+            DispatchQueue.main.async {
+                self.isLoading = false
+                if let error = error {
+                    print("Failed to save matches to Firebase: \(error)")
+                    // Qui potresti mostrare un alert all'utente
+                } else {
+                    // Opzionale: fai qualcosa in caso di successo
+                    print("Matches saved to Firebase successfully.")
+                }
+            }
+        }
+        // Continua a salvare anche localmente se lo desideri
+        saveMatchesLocally()
+    }
+
+    private func saveMatchesLocally() {
         do {
             let encoder = JSONEncoder()
             let data = try encoder.encode(matches)
             matchesData = data
         } catch {
-            print("Failed to save matches: \(error)")
+            print("Failed to save matches locally: \(error)")
         }
     }
     
     private func loadMatches() {
+        isLoading = true
+        
+        // Prima carica i dati locali
         do {
             let decoder = JSONDecoder()
             matches = try decoder.decode([Match].self, from: matchesData)
         } catch {
-            print("Failed to load matches: \(error)")
+            print("Failed to load matches locally: \(error)")
+        }
+        
+        // Poi carica i dati da Firebase
+        FirebaseManager.shared.fetchMatches { fetchedMatches, error in
+            DispatchQueue.main.async {
+                self.isLoading = false
+                self.initialLoadCompleted = true
+                
+                if let error = error {
+                    print("Error fetching matches from Firebase: \(error)")
+                    return
+                }
+                
+                if let fetchedMatches = fetchedMatches {
+                    // Se i dati da Firebase sono vuoti ma abbiamo dati locali,
+                    // sincronizziamo quelli locali con Firebase
+                    if fetchedMatches.isEmpty && !self.matches.isEmpty {
+                        self.saveMatchesToFirebase()
+                    } else {
+                        self.matches = fetchedMatches
+                        
+                        // Salviamo localmente per avere i dati anche offline
+                        do {
+                            let encoder = JSONEncoder()
+                            let data = try encoder.encode(self.matches)
+                            self.matchesData = data
+                        } catch {
+                            print("Failed to save matches locally after fetch: \(error)")
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -215,8 +289,37 @@ struct MatchView: View {
             print("Failed to load players: \(error)")
         }
     }
-}
 
+    
+    // Configurazione dell'osservatore per i dati in tempo reale
+    private func setupMatchesObserver() {
+        FirebaseManager.shared.observeMatches { updatedMatches in
+            DispatchQueue.main.async {
+                guard let updatedMatches = updatedMatches else { return }
+                
+                // Aggiorna i dati solo se sono cambiati
+                if !self.matches.elementsEqual(updatedMatches, by: { $0.id == $1.id }) {
+                    self.matches = updatedMatches
+                    
+                    // Aggiorna anche i dati locali
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(self.matches)
+                        self.matchesData = data
+                    } catch {
+                        print("Failed to save updated matches locally: \(error)")
+                    }
+                }
+                
+                // Assicuriamoci che initialLoadCompleted sia true dopo la prima sincronizzazione
+                if !self.initialLoadCompleted {
+                    self.initialLoadCompleted = true
+                    self.isLoading = false
+                }
+            }
+        }
+    }
+}
 #Preview {
     MatchView()
 }

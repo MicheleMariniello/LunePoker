@@ -4,10 +4,30 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>LunePoker.xcscheme_^#shared#^_</key>
+		<key>LunePoker 1 1.xcscheme_^#shared#^_</key>
 		<dict>
+			<key>isShown</key>
+			<true/>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>2</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>295854FE2D8C793A001BDB39</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2958550E2D8C793B001BDB39</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>295855182D8C793B001BDB39</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
