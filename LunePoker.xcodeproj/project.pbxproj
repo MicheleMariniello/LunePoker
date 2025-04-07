@@ -32,6 +32,7 @@
 		2975E8A42DA156A300EBA3D1 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 2975E8A32DA156A300EBA3D1 /* FirebaseStorageCombine-Community */; };
 		2975E8A62DA156A300EBA3D1 /* FirebaseVertexAI in Frameworks */ = {isa = PBXBuildFile; productRef = 2975E8A52DA156A300EBA3D1 /* FirebaseVertexAI */; };
 		2975E95E2DA227C000EBA3D1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2975E95D2DA227C000EBA3D1 /* GoogleService-Info.plist */; };
+		2993FB9E2DA46CF800B3D95D /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2993FB9D2DA46CF800B3D95D /* SDWebImageSwiftUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +92,7 @@
 				2975E88C2DA156A300EBA3D1 /* FirebaseDynamicLinks in Frameworks */,
 				2975E87E2DA156A300EBA3D1 /* FirebaseAppCheck in Frameworks */,
 				2975E8822DA156A300EBA3D1 /* FirebaseAuth in Frameworks */,
+				2993FB9E2DA46CF800B3D95D /* SDWebImageSwiftUI in Frameworks */,
 				2975E8782DA156A300EBA3D1 /* FirebaseAnalytics in Frameworks */,
 				2975E88E2DA156A300EBA3D1 /* FirebaseFirestore in Frameworks */,
 				2975E89C2DA156A300EBA3D1 /* FirebaseMessaging in Frameworks */,
@@ -190,6 +192,7 @@
 				2975E8A12DA156A300EBA3D1 /* FirebaseStorage */,
 				2975E8A32DA156A300EBA3D1 /* FirebaseStorageCombine-Community */,
 				2975E8A52DA156A300EBA3D1 /* FirebaseVertexAI */,
+				2993FB9D2DA46CF800B3D95D /* SDWebImageSwiftUI */,
 			);
 			productName = LunePoker;
 			productReference = 295854FF2D8C793A001BDB39 /* LunePoker.app */;
@@ -275,6 +278,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				2975E8762DA156A300EBA3D1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				2993FB572DA46BEF00B3D95D /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 295855002D8C793A001BDB39 /* Products */;
@@ -650,6 +654,14 @@
 				minimumVersion = 11.11.0;
 			};
 		};
+		2993FB572DA46BEF00B3D95D /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -772,6 +784,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2975E8762DA156A300EBA3D1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseVertexAI;
+		};
+		2993FB9D2DA46CF800B3D95D /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2993FB572DA46BEF00B3D95D /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
