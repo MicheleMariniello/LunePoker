@@ -79,18 +79,6 @@ struct AddPlayerView: View {
     }
 }
 
-// View per mostrare l'immagine della carta
-struct CardView: View {
-    var cardName: String
-
-    var body: some View {
-        Image(cardName)
-            .resizable()
-            .frame(width: 50, height: 70)
-            .shadow(radius: 2)
-    }
-}
-
 #Preview {
     @Previewable @State var isPresented = true
     

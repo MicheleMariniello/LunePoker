@@ -130,7 +130,8 @@ struct PlayerView: View {
                         }
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color.gray.opacity(0.2))
+                        .background(Color.blue)
+                        .foregroundStyle(.white)
                         .cornerRadius(8)
                         
                         Button("Elimina") {
@@ -147,9 +148,11 @@ struct PlayerView: View {
                     .padding()
                 }
                 .frame(width: 300)
-                .background(Color.white)
+                .background(Color.black)
+                .foregroundStyle(.white)
                 .cornerRadius(12)
                 .shadow(radius: 10)
+                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray.opacity(Double(0.5)), lineWidth: 2))
             }
         }
     }
