@@ -62,7 +62,7 @@ struct MatchView: View {
                     VStack(spacing: 0) {
                         HStack {
                             Spacer()
-                            Text("Poker Matches")
+                            Text("Partite")
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
@@ -82,7 +82,7 @@ struct MatchView: View {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
                                 .scaleEffect(1.5)
-                            Text("Synchronizing matches...")
+                            Text("Sincronizzo le Partite...")
                                 .foregroundColor(.gray)
                                 .padding()
                             Spacer()

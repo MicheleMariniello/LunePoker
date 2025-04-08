@@ -37,7 +37,7 @@ struct PlayerView: View {
                         // Header personalizzato
                         HStack {
                             Spacer()
-                            Text("Players")
+                            Text("Giocatori")
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
@@ -57,7 +57,7 @@ struct PlayerView: View {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
                                 .scaleEffect(1.5)
-                            Text("Synchronizing data...")
+                            Text("Sincronizzo i Giocatori...")
                                 .foregroundColor(.gray)
                                 .padding()
                             Spacer()

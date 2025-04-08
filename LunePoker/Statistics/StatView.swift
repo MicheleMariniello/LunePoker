@@ -53,7 +53,7 @@ struct StatView: View {
                 Color.black.edgesIgnoringSafeArea(.all)
                 
                 VStack {
-                    Text("Statistics")
+                    Text("Statistiche")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
