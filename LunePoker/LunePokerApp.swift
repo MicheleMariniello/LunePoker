@@ -50,15 +50,15 @@ struct LunePokerApp: App {
                             .font(.system(size: 60))
                             .foregroundColor(.yellow)
                         
-                        Text("Impossibile connettersi al server")
+                        Text("Unable to connect to server")
                             .font(.title2)
                             .fontWeight(.bold)
                         
-                        Text("Verifica la tua connessione internet e riprova.")
+                        Text("Please check your internet connection and try again.")
                             .multilineTextAlignment(.center)
                             .padding(.horizontal)
                         
-                        Button("Riprova") {
+                        Button("Try again") {
                             // Riavvia la sequenza di caricamento con animazione
                             withAnimation(.easeIn(duration: 0.3)) {
                                 loadingOpacity = 1.0
@@ -129,26 +129,26 @@ struct LunePokerApp: App {
     }
 }
 
-// Schermata di caricamento successiva
-struct SplashScreen: View {
-    var body: some View {
-        ZStack {
-            Color.black.edgesIgnoringSafeArea(.all)
-            
-            VStack(spacing: 20) {
-                // Logo dell'app
-                Text("Lune Poker")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                    .scaleEffect(1.5)
-                
-                Text("Connessione ai server in corso...")
-                    .foregroundColor(.gray)
-            }
-        }
-    }
-}
+//// Schermata di caricamento successiva
+//struct SplashScreen: View {
+//    var body: some View {
+//        ZStack {
+//            Color.black.edgesIgnoringSafeArea(.all)
+//            
+//            VStack(spacing: 20) {
+//                // Logo dell'app
+//                Text("Lune Poker")
+//                    .font(.largeTitle)
+//                    .fontWeight(.bold)
+//                    .foregroundColor(.white)
+//                
+//                ProgressView()
+//                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+//                    .scaleEffect(1.5)
+//                
+//                Text("Connecting to servers in progress...")
+//                    .foregroundColor(.gray)
+//            }
+//        }
+//    }
+//}

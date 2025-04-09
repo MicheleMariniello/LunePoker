@@ -27,13 +27,13 @@ struct AddPlayerView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Info Giocatore")) {
-                    TextField("Nome", text: $name)
+                Section(header: Text("Player Info")) {
+                    TextField("Name", text: $name)
                     TextField("Nickname", text: $nickname)
-                    TextField("Descrizione", text: $description)
+                    TextField("Desciption", text: $description)
                 }
 
-                Section(header: Text("Seleziona Mano Preferita")) {
+                Section(header: Text("Select Favorite Hand")) {
                     LazyVGrid(columns: columns, spacing: 10) {
                         ForEach(allCards, id: \.self) { card in
                             Image(card)
@@ -49,7 +49,7 @@ struct AddPlayerView: View {
                     }
                 }
             }
-            .navigationTitle("Nuovo Giocatore")
+            .navigationTitle("New Player")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {

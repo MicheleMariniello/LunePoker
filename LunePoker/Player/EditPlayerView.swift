@@ -38,10 +38,10 @@ struct EditPlayerView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Info Giocatore")) {
-                    TextField("Nome", text: $name)
+                Section(header: Text("Player Info")) {
+                    TextField("Name", text: $name)
                     TextField("Nickname", text: $nickname)
-                    TextField("Descrizione", text: $description)
+                    TextField("Description", text: $description)
                 }
 
                 Section(header: Text("Seleziona Mano Preferita")) {
@@ -60,7 +60,7 @@ struct EditPlayerView: View {
                     }
                 }
             }
-            .navigationTitle("Modifica Giocatore")
+            .navigationTitle("Edit Player")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {

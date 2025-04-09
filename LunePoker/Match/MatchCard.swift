@@ -27,7 +27,7 @@ struct MatchCard: View {
                 
                 Spacer()
                 
-                Text("Montepremi: €\(String(format: "%.2f", match.totalPrize))")
+                Text("Prize money: €\(String(format: "%.2f", match.totalPrize))")
                     .font(.subheadline)
                     .foregroundColor(.green)
             }
@@ -35,7 +35,7 @@ struct MatchCard: View {
             if !match.winners.isEmpty {
                 Divider().background(Color.gray)
                 
-                Text("Vincitori:")
+                Text("Winners:")
                     .font(.subheadline)
                     .foregroundColor(.gray)
                 

@@ -36,15 +36,15 @@ struct AddMatchView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Data partita")) {
-                    DatePicker("Data", selection: $matchDate,
+                Section(header: Text("Match Data")) {
+                    DatePicker("Date", selection: $matchDate,
                                in: ...Date(),
                                displayedComponents: .date)
                 }
                 
-                Section(header: Text("Partecipanti e quote")) {
+                Section(header: Text("Participants and fees")) {
                     if players.isEmpty {
-                        Text("Non ci sono giocatori disponibili. Aggiungi prima dei giocatori.")
+                        Text("There are no players available. Add players first.")
                             .foregroundColor(.secondary)
                     } else {
                         ForEach((players.sorted {
@@ -99,7 +99,7 @@ struct AddMatchView: View {
                                     Button {
                                         addParticipant(player.id)
                                     } label: {
-                                        Text("Aggiungi")
+                                        Text("Add")
                                             .foregroundColor(.blue)
                                     }
                                     .buttonStyle(BorderlessButtonStyle())
@@ -110,13 +110,13 @@ struct AddMatchView: View {
                 }
                 
                 if !selectedParticipants.isEmpty {
-                    Section(header: Text("Montepremi totale")) {
+                    Section(header: Text("Total prize pool")) {
                         Text("€\(String(format: "%.2f", totalPrize))")
                             .bold()
                             .foregroundColor(.green)
                     }
                     
-                    Section(header: Text("Vincitori e posizionamenti")) {
+                    Section(header: Text("Winners and placements")) {
                         ForEach(selectedParticipants) { participant in
                             if let player = playerByID(participant.playerID) {
                                 
@@ -181,7 +181,7 @@ struct AddMatchView: View {
                                             Button {
                                                 addWinner(participant.playerID)
                                             } label: {
-                                                Text("Aggiungi come vincitore")
+                                                Text("Add Winner")
                                                     .foregroundColor(.blue)
                                                     .multilineTextAlignment(.center)
                                             }
@@ -195,7 +195,7 @@ struct AddMatchView: View {
                         
                         if !winners.isEmpty {
                             HStack {
-                                Text("Totale vincite:")
+                                Text("Total winnings:")
                                 Spacer()
                                 Text("€\(String(format: "%.2f", totalWinnings))")
                                     .bold()
@@ -212,25 +212,25 @@ struct AddMatchView: View {
                     }
                 }
             }
-            .navigationTitle("Nuova Partita")
+            .navigationTitle("New Match")
             .navigationBarItems(
-                leading: Button("Annulla") {
+                leading: Button("Cancel") {
                     isPresented = false
                 },
-                trailing: Button("Salva") {
+                trailing: Button("Save") {
                     // Validazione
                     if selectedParticipants.isEmpty {
-                        errorMessage = "Devi selezionare almeno un partecipante."
+                        errorMessage = "You must select at least one participant."
                         return
                     }
                     
                     if winners.isEmpty {
-                        errorMessage = "Devi selezionare almeno un vincitore."
+                        errorMessage = "You must select at least one winner."
                         return
                     }
                     
                     if !isPrizeBalanced {
-                        errorMessage = "Il totale delle vincite deve essere uguale al montepremi totale."
+                        errorMessage = "The total winnings must equal the total prize pool."
                         return
                     }
                     saveMatch(

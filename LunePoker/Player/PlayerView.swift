@@ -37,7 +37,7 @@ struct PlayerView: View {
                         // Header personalizzato
                         HStack {
                             Spacer()
-                            Text("Giocatori")
+                            Text("Players")
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
@@ -57,7 +57,7 @@ struct PlayerView: View {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
                                 .scaleEffect(1.5)
-                            Text("Sincronizzo i Giocatori...")
+                            Text("Synchronizing Players...")
                                 .foregroundColor(.gray)
                                 .padding()
                             Spacer()
@@ -116,15 +116,15 @@ struct PlayerView: View {
                     }
                 
                 VStack {
-                    Text("Conferma eliminazione")
+                    Text("Confirm deletion")
                         .font(.headline)
                         .padding()
                     
-                    Text("Sei sicuro di voler eliminare \(player.name)?")
+                    Text("Are you sure you want to delete \(player.name)?")
                         .padding(.horizontal)
                     
                     HStack {
-                        Button("Annulla") {
+                        Button("Cancel") {
                             showDeleteAlert = false
                             playerToDelete = nil
                         }
@@ -134,7 +134,7 @@ struct PlayerView: View {
                         .foregroundStyle(.white)
                         .cornerRadius(8)
                         
-                        Button("Elimina") {
+                        Button("Delete") {
                             removePlayer(player)
                             showDeleteAlert = false
                             playerToDelete = nil

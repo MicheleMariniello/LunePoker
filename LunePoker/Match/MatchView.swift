@@ -62,7 +62,7 @@ struct MatchView: View {
                     VStack(spacing: 0) {
                         HStack {
                             Spacer()
-                            Text("Partite")
+                            Text("Matches")
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
@@ -82,7 +82,7 @@ struct MatchView: View {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
                                 .scaleEffect(1.5)
-                            Text("Sincronizzo le Partite...")
+                            Text("Synchronizing Matches...")
                                 .foregroundColor(.gray)
                                 .padding()
                             Spacer()
@@ -139,7 +139,7 @@ struct MatchView: View {
                         }
 
                     VStack {
-                        Text("Conferma eliminazione")
+                        Text("Confirm deletion")
                             .font(.headline)
                             .padding()
 
@@ -152,11 +152,11 @@ struct MatchView: View {
                         
                         let dateString = dateFormatter.string(from: match.date)
                         
-                        Text("Sei sicuro di voler eliminare la partita del \(dateString)?")
+                        Text("Are you sure you want to delete the game from  \(dateString)?")
                             .padding(.horizontal)
 
                         HStack {
-                            Button("Annulla") {
+                            Button("Cancel") {
                                 showDeleteAlert = false
                                 matchToDelete = nil
                             }
@@ -166,7 +166,7 @@ struct MatchView: View {
                             .foregroundStyle(.white)
                             .cornerRadius(8)
 
-                            Button("Elimina") {
+                            Button("Delete") {
                                 removeMatch(match)
                                 showDeleteAlert = false
                                 matchToDelete = nil

@@ -16,32 +16,32 @@ struct StatView: View {
     
     // Definizione dei tipi di statistiche
     enum StatisticType: String, CaseIterable, Identifiable {
-        case totalBalance = "Bilancio totale"
-        case totalWinnings = "Vincite totali"
-        case totalLosses = "Perdite totali"
-        case firstPlaces = "Primi posti"
-        case podiums = "Podi (top 3)"
-        case participations = "Partecipazioni"
-        case winRate = "% Vittorie"
-        case biggestWin = "Vincita più grande"
+        case totalBalance = "Total budget"
+        case totalWinnings = "Total winnings"
+        case totalLosses = "Total losses"
+        case firstPlaces = "First places"
+        case podiums = "Podiums (top 3)"
+        case participations = "Participations"
+        case winRate = "% Wins"
+        case biggestWin = "Bigger win"
         
         var id: String { self.rawValue }
     }
     
     // Filtro per periodo
     enum PeriodFilter: String, CaseIterable, Identifiable {
-        case allTime = "Tutto"
-        case lastMonth = "Ultimo mese"
-        case lastThreeMonths = "Ultimi 3 mesi"
-        case thisYear = "Quest'anno"
+        case allTime = "All Time"
+        case lastMonth = "Last Month"
+        case lastThreeMonths = "Last 3 months"
+        case thisYear = "This Year"
         
         var id: String { self.rawValue }
     }
     
     // Ordinamento
     enum SortOrder: String, CaseIterable, Identifiable {
-        case ascending = "Crescente"
-        case descending = "Decrescente"
+        case ascending = "Growing"
+        case descending = "Descending"
         
         var id: String { self.rawValue }
     }
@@ -53,7 +53,7 @@ struct StatView: View {
                 Color.black.edgesIgnoringSafeArea(.all)
                 
                 VStack {
-                    Text("Statistiche")
+                    Text("Statistics")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
@@ -61,7 +61,7 @@ struct StatView: View {
                     
                     // Selettori per filtri e ordinamento
                     VStack(spacing: 10) {
-                        Picker("Periodo", selection: $periodFilter) {
+                        Picker("Period", selection: $periodFilter) {
                             ForEach(PeriodFilter.allCases) { period in
                                 Text(period.rawValue).tag(period)
                             }
@@ -69,7 +69,7 @@ struct StatView: View {
                         .pickerStyle(MenuPickerStyle())
                         
                         HStack {
-                            Picker("Statistica", selection: $selectedStatistic) {
+                            Picker("Statistic", selection: $selectedStatistic) {
                                 ForEach(StatisticType.allCases) { statType in
                                     Text(statType.rawValue).tag(statType)
                                 }
@@ -78,7 +78,7 @@ struct StatView: View {
                             
                             Spacer()
                             
-                            Picker("Ordine", selection: $sortOrder) {
+                            Picker("Order", selection: $sortOrder) {
                                 ForEach(SortOrder.allCases) { order in
                                     Text(order.rawValue).tag(order)
                                 }
@@ -93,13 +93,13 @@ struct StatView: View {
                     
                     if matches.isEmpty {
                         Spacer()
-                        Text("Nessuna partita registrata")
+                        Text("No games recorded")
                             .foregroundColor(.gray)
                             .padding()
                         Spacer()
                     } else if filteredMatches.isEmpty {
                         Spacer()
-                        Text("Nessun dato disponibile per il periodo selezionato")
+                        Text("No data available for the selected period")
                             .foregroundColor(.gray)
                             .padding()
                         Spacer()
@@ -115,12 +115,12 @@ struct StatView: View {
                                 }
                             }
                             
-                            Section(header: Text("Statistiche generali")
+                            Section(header: Text("General statistics")
                                 .foregroundColor(.white)) {
-                                    StatInfoRow(title: "Totale partite", value: "\(filteredMatches.count)")
-                                    StatInfoRow(title: "Montepremi totale", value: "€\(String(format: "%.2f", totalPrizePool))")
+                                    StatInfoRow(title: "Total matches", value: "\(filteredMatches.count)")
+                                    StatInfoRow(title: "Total prize pool", value: "€\(String(format: "%.2f", totalPrizePool))")
                                     if let lastMatch = filteredMatches.sorted(by: { $0.date > $1.date }).first {
-                                        StatInfoRow(title: "Ultima partita", value: dateFormatter.string(from: lastMatch.date))
+                                        StatInfoRow(title: "Last game", value: dateFormatter.string(from: lastMatch.date))
                                     }
                                 }
                         }
