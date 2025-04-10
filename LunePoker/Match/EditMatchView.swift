@@ -63,9 +63,6 @@ struct EditMatchView: View {
                                 VStack(alignment: .leading) {
                                     Text(player.nickname)
                                         .font(.headline)
-//                                    Text(player.nickname)
-//                                        .font(.subheadline)
-//                                        .foregroundColor(.secondary)
                                 }
                                 
                                 Spacer()
@@ -257,7 +254,7 @@ struct EditMatchView: View {
                     saveChanges(updatedMatch)
                     presentationMode.wrappedValue.dismiss()
                 }
-                .disabled(selectedParticipants.isEmpty || winners.isEmpty || !isPrizeBalanced)
+                    .disabled(selectedParticipants.isEmpty || winners.isEmpty || !isPrizeBalanced)
             )
         }
     }
@@ -324,7 +321,7 @@ struct EditMatchView: View {
         Player(id: UUID(), name: "Marco", nickname: "Ace", description: "bb", SelectedCard1: "AS", SelectedCard2: "KS"),
         Player(id: UUID(), name: "Giulia", nickname: "Queen", description: "cc", SelectedCard1: "AS", SelectedCard2: "KS")
     ]
-
+    
     let sampleMatch = Match(
         id: UUID(),
         date: Date(),
@@ -338,7 +335,7 @@ struct EditMatchView: View {
             Winner(playerID: samplePlayers[1].id, position: 2, amount: 10)
         ]
     )
-
+    
     EditMatchView(
         match: sampleMatch,
         saveChanges: { _ in },

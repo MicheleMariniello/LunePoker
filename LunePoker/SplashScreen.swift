@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// Schermata di caricamento successiva
 struct SplashScreen: View {
     var body: some View {
         ZStack {
@@ -30,7 +29,6 @@ struct SplashScreen: View {
         }
     }
 }
-
 
 #Preview {
     SplashScreen()

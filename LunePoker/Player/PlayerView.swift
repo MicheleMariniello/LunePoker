@@ -26,7 +26,7 @@ struct PlayerView: View {
     @State private var showDeleteAlert = false
     @State private var isLoading = false
     @State private var initialLoadCompleted = false
-
+    
     var body: some View {
         ZStack {
             NavigationView {
@@ -62,7 +62,6 @@ struct PlayerView: View {
                                 .padding()
                             Spacer()
                         } else {
-                            // Contenuto principale
                             ScrollView {
                                 LazyVStack(spacing: 15) {
                                     ForEach(players.sorted(by: { $0.name < $1.name })) { player in
@@ -84,8 +83,6 @@ struct PlayerView: View {
                             }
                         }
                     }
-                    
-                    // Sheet invariati
                     .sheet(isPresented: $isAddingPlayer) {
                         AddPlayerView(isPresented: $isAddingPlayer, savePlayer: addPlayer)
                     }
@@ -101,11 +98,7 @@ struct PlayerView: View {
                 }
                 setupPlayersObserver()
             }
-            .onDisappear {
-                // Non è necessario rimuovere osservatori qui poiché è gestito a livello di app
-            }
             
-            // L'alert è ora un overlay su tutta la view
             if showDeleteAlert, let player = playerToDelete {
                 Color.black.opacity(0.3)
                     .edgesIgnoringSafeArea(.all)
@@ -156,14 +149,14 @@ struct PlayerView: View {
             }
         }
     }
-
+    
     // Funzione per aggiungere un nuovo giocatore
     private func addPlayer(name: String, nickname: String, description: String, card1: String, card2: String) {
         let newPlayer = Player(id: UUID(), name: name, nickname: nickname, description: description, SelectedCard1: card1, SelectedCard2: card2)
         players.append(newPlayer)
         savePlayersToFirebase()
     }
-
+    
     // Funzione per aggiornare un giocatore
     private func updatePlayer(updatedPlayer: Player) {
         if let index = players.firstIndex(where: { $0.id == updatedPlayer.id }) {
@@ -171,13 +164,13 @@ struct PlayerView: View {
             savePlayersToFirebase()
         }
     }
-
+    
     // Funzione per rimuovere un giocatore
     private func removePlayer(_ player: Player) {
         players.removeAll { $0.id == player.id }
         savePlayersToFirebase()
     }
-
+    
     // Funzione per salvare i dati su Firebase
     private func savePlayersToFirebase() {
         isLoading = true
@@ -193,10 +186,10 @@ struct PlayerView: View {
                 }
             }
         }
-        // Continua a salvare anche localmente se lo desideri
+        // Continua a salvare anche localmente
         savePlayersLocally()
     }
-
+    
     private func savePlayersLocally() {
         do {
             let encoder = JSONEncoder()
@@ -206,13 +199,13 @@ struct PlayerView: View {
             print("Failed to save players locally: \(error)")
         }
     }
-
+    
     // Funzione per caricare i dati da AppStorage e Firebase
     private func loadPlayers() {
         print("loadPlayers() chiamato")
         isLoading = true
         print("isLoading impostato a true")
-
+        
         // Prima carica i dati locali
         do {
             print("Tentativo di caricare i giocatori localmente...")
@@ -222,7 +215,7 @@ struct PlayerView: View {
         } catch {
             print("Errore durante il caricamento dei giocatori localmente: \(error)")
         }
-
+        
         // Poi carica i dati da Firebase
         print("Chiamata a FirebaseManager.shared.fetchPlayers...")
         FirebaseManager.shared.fetchPlayers { fetchedPlayers, error in
@@ -232,12 +225,12 @@ struct PlayerView: View {
                 print("isLoading impostato a false")
                 self.initialLoadCompleted = true
                 print("initialLoadCompleted impostato a true")
-
+                
                 if let error = error {
                     print("Errore durante il recupero dei giocatori da Firebase: \(error)")
                     return
                 }
-
+                
                 if let fetchedPlayers = fetchedPlayers {
                     print("Giocatori recuperati da Firebase: \(fetchedPlayers.count)")
                     if fetchedPlayers.isEmpty && !self.players.isEmpty {
@@ -277,7 +270,6 @@ struct PlayerView: View {
                     }
                 }
                 
-//                 Assicuriamoci che initialLoadCompleted sia true dopo la prima sincronizzazione
                 if !self.initialLoadCompleted {
                     self.initialLoadCompleted = true
                     self.isLoading = false

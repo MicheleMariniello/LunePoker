@@ -92,7 +92,7 @@ struct LunePokerApp: App {
     // Funzione per gestire la sequenza completa di avvio con animazioni fluide
     private func startAppSequence() {
         // 1. Mostra la GIF di splash per 2.5 secondi
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.8) {
             // 2. Inizia la transizione dalla GIF alla schermata di caricamento
             withAnimation(.easeInOut(duration: 0.8)) {
                 splashOpacity = 0.0
@@ -128,27 +128,3 @@ struct LunePokerApp: App {
         }
     }
 }
-
-//// Schermata di caricamento successiva
-//struct SplashScreen: View {
-//    var body: some View {
-//        ZStack {
-//            Color.black.edgesIgnoringSafeArea(.all)
-//            
-//            VStack(spacing: 20) {
-//                // Logo dell'app
-//                Text("Lune Poker")
-//                    .font(.largeTitle)
-//                    .fontWeight(.bold)
-//                    .foregroundColor(.white)
-//                
-//                ProgressView()
-//                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
-//                    .scaleEffect(1.5)
-//                
-//                Text("Connecting to servers in progress...")
-//                    .foregroundColor(.gray)
-//            }
-//        }
-//    }
-//}

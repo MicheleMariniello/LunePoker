@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// Card per visualizzare una partita
 struct MatchCard: View {
     let match: Match
     let players: [Player]

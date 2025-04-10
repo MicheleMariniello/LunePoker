@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// Riga per le statistiche generali
 struct StatInfoRow: View {
     let title: String
     let value: String

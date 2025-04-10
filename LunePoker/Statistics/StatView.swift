@@ -14,7 +14,6 @@ struct StatView: View {
     @State private var periodFilter: PeriodFilter = .allTime
     @State private var sortOrder: SortOrder = .descending
     
-    // Definizione dei tipi di statistiche
     enum StatisticType: String, CaseIterable, Identifiable {
         case totalBalance = "Total budget"
         case totalWinnings = "Total winnings"
@@ -28,7 +27,6 @@ struct StatView: View {
         var id: String { self.rawValue }
     }
     
-    // Filtro per periodo
     enum PeriodFilter: String, CaseIterable, Identifiable {
         case allTime = "All Time"
         case lastMonth = "Last Month"
@@ -38,7 +36,6 @@ struct StatView: View {
         var id: String { self.rawValue }
     }
     
-    // Ordinamento
     enum SortOrder: String, CaseIterable, Identifiable {
         case ascending = "Growing"
         case descending = "Descending"
@@ -59,7 +56,6 @@ struct StatView: View {
                         .foregroundColor(.white)
                         .padding()
                     
-                    // Selettori per filtri e ordinamento
                     VStack(spacing: 10) {
                         Picker("Period", selection: $periodFilter) {
                             ForEach(PeriodFilter.allCases) { period in
@@ -87,7 +83,7 @@ struct StatView: View {
                         }
                     }
                     .padding()
-                    .background(Color(UIColor.systemGray6)) // Sfondo scuro per i picker
+                    .background(Color(UIColor.systemGray6))
                     .cornerRadius(10)
                     .padding(.horizontal)
                     
@@ -125,19 +121,17 @@ struct StatView: View {
                                 }
                         }
                         .listStyle(InsetGroupedListStyle())
-                        // Personalizzazione dello stile della lista per lo sfondo nero
                         .onAppear {
                             UITableView.appearance().backgroundColor = .black
                             UITableViewCell.appearance().backgroundColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 1.0)
                             
-                            // Per iOS 15+
                             if #available(iOS 15.0, *) {
                                 UITableView.appearance().sectionHeaderTopPadding = 0
                             }
                         }
                     }
                 }
-                .foregroundColor(.white) // Imposta il colore del testo su bianco
+                .foregroundColor(.white)
             }
             .toolbarColorScheme(.dark, for: .navigationBar)
             .preferredColorScheme(.dark)
@@ -193,7 +187,7 @@ struct StatView: View {
         var id: UUID { player.id }
     }
     
-// MARK:     Calcola statistiche per tutti i giocatori
+    // MARK:     Calcola statistiche per tutti i giocatori
     var playerStats: [PlayerStat] {
         players.map { player in
             let playerMatches = filteredMatches.filter { match in

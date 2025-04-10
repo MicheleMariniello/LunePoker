@@ -6,7 +6,6 @@
 //
 import SwiftUI
 
-// Riga personalizzata per mostrare le statistiche dei giocatori
 struct PlayerStatRow: View {
     let stat: StatView.PlayerStat
     let statType: StatView.StatisticType

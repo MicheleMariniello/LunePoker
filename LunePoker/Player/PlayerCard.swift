@@ -9,7 +9,7 @@ import SwiftUI
 struct PlayerCard: View {
     let player: Player
     let backgroundImage = "Background_Cards"
-
+    
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             Image(backgroundImage)
@@ -25,7 +25,7 @@ struct PlayerCard: View {
                         endPoint: .center
                     )
                 )
-
+            
             VStack(alignment: .leading, spacing: 8) {
                 // Mostra le carte selezionate
                 HStack {
@@ -44,9 +44,7 @@ struct PlayerCard: View {
                     .foregroundColor(.white)
                 Text(player.description)
                     .font(.subheadline)
-                    .foregroundColor(.white.opacity(0.8))
-
-
+                    .foregroundColor(.white.opacity(0.8))  
             }
             .padding()
         }

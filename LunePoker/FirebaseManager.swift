@@ -3,6 +3,7 @@
 //  LunePoker
 //
 //  Created by Michele Mariniello on 05/04/25.
+
 import SwiftUI
 import Foundation
 import FirebaseCore
@@ -32,7 +33,7 @@ class FirebaseManager {
                 completion(false, error)
                 return
             }
-
+            
             print("User signed in anonymously with UID: \(authResult?.user.uid ?? "unknown")")
             completion(true, nil)
         }
@@ -65,7 +66,7 @@ class FirebaseManager {
     func fetchPlayers(completion: @escaping ([Player]?, Error?) -> Void) {
         playersRef.observeSingleEvent(of: .value) { snapshot, _ in
             guard let value = snapshot.value as? [String: [String: Any]] else {
-                completion([], nil)  // No data yet
+                completion([], nil)
                 return
             }
             
@@ -88,11 +89,9 @@ class FirebaseManager {
                         SelectedCard1: card1,
                         SelectedCard2: card2
                     )
-                    
                     players.append(player)
                 }
             }
-            
             completion(players, nil)
         }
     }
@@ -125,7 +124,6 @@ class FirebaseManager {
                         SelectedCard1: card1,
                         SelectedCard2: card2
                     )
-                    
                     players.append(player)
                 }
             }
@@ -273,11 +271,9 @@ class FirebaseManager {
                         totalPrize: totalPrize,
                         winners: winners
                     )
-                    
                     matches.append(match)
                 }
             }
-            
             completion(matches)
         }
     }

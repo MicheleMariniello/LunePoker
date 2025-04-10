@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// Vista per aggiungere una nuova partita
 struct AddMatchView: View {
     @Binding var isPresented: Bool
     var saveMatch: (Date, [Participant], [Winner]) -> Void
@@ -49,7 +48,7 @@ struct AddMatchView: View {
                     } else {
                         ForEach((players.sorted {
                             (indexOfParticipant(playerID: $0.id) != nil ? 0 : 1) <
-                            (indexOfParticipant(playerID: $1.id) != nil ? 0 : 1)
+                                (indexOfParticipant(playerID: $1.id) != nil ? 0 : 1)
                         })) { player in
                             HStack {
                                 VStack(alignment: .leading) {
@@ -240,7 +239,7 @@ struct AddMatchView: View {
                     )
                     isPresented = false
                 }
-                .disabled(selectedParticipants.isEmpty || winners.isEmpty || !isPrizeBalanced)
+                    .disabled(selectedParticipants.isEmpty || winners.isEmpty || !isPrizeBalanced)
             )
         }
     }
@@ -275,8 +274,6 @@ struct AddMatchView: View {
             }
         }
     }
-
-
     
     private func incrementEntryFee(at index: Int) {
         var updatedParticipants = selectedParticipants
@@ -324,11 +321,7 @@ struct AddMatchView: View {
         players: [
             Player(id: UUID(), name: "Mario Rossi", nickname: "Marr", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS"),
             Player(id: UUID(), name: "Luca Bianchi", nickname: "Zrro", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS"),
-            Player(id: UUID(), name: "Giulia Verdi", nickname: "a", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS"),
-            Player(id: UUID(), name: "Giulia Rossi", nickname: "b", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS"),
-            Player(id: UUID(), name: "Giulia Bianchi", nickname: "c", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS"),
-            Player(id: UUID(), name: "Giulia Violi", nickname: "d", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS"),
-            Player(id: UUID(), name: "Giulia freschi", nickname: "e", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS")
+            Player(id: UUID(), name: "Giulia Verdi", nickname: "a", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS")
         ]
     )
 }

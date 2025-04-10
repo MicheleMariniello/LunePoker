@@ -8,7 +8,6 @@
 import SwiftUI
 import FirebaseDatabase
 
-// Definizione della struttura Match aggiornata
 struct Match: Identifiable, Codable {
     let id: UUID
     var date: Date
@@ -28,15 +27,13 @@ struct Participant: Identifiable, Codable {
 struct Winner: Identifiable, Codable {
     var id: UUID { playerID }
     let playerID: UUID
-    var position: Int // 1 = primo, 2 = secondo, ecc.
+    var position: Int 
     var amount: Double
 }
 
 struct MatchView: View {
-    // AppStorage per salvare le partite in modo persistente
     @AppStorage("matches") private var matchesData: Data = Data()
     
-    // AppStorage per accedere ai giocatori esistenti
     @AppStorage("players") private var playersData: Data = Data()
     
     @State private var matches: [Match] = []
@@ -44,11 +41,9 @@ struct MatchView: View {
     @State private var isAddingMatch = false
     @State private var selectedMatch: Match?
     
-    // Stati per l'alert di conferma eliminazione
     @State private var matchToDelete: Match?
     @State private var showDeleteAlert = false
     
-    // Stato per mostrare il caricamento
     @State private var isLoading = false
     @State private var initialLoadCompleted = false
     
@@ -124,9 +119,6 @@ struct MatchView: View {
                 }
                 setupMatchesObserver()
             }
-//            .onDisappear {
-//
-//            }
             
             // Alert di conferma come overlay
             if showDeleteAlert, let match = matchToDelete {
@@ -137,12 +129,12 @@ struct MatchView: View {
                             showDeleteAlert = false
                             matchToDelete = nil
                         }
-
+                    
                     VStack {
                         Text("Confirm deletion")
                             .font(.headline)
                             .padding()
-
+                        
                         // Formattazione della data
                         let dateFormatter: DateFormatter = {
                             let formatter = DateFormatter()
@@ -154,7 +146,7 @@ struct MatchView: View {
                         
                         Text("Are you sure you want to delete the game from  \(dateString)?")
                             .padding(.horizontal)
-
+                        
                         HStack {
                             Button("Cancel") {
                                 showDeleteAlert = false
@@ -165,7 +157,7 @@ struct MatchView: View {
                             .background(Color.blue)
                             .foregroundStyle(.white)
                             .cornerRadius(8)
-
+                            
                             Button("Delete") {
                                 removeMatch(match)
                                 showDeleteAlert = false
@@ -190,7 +182,6 @@ struct MatchView: View {
         }
     }
     
-    // Il resto delle funzioni rimane invariato ma aggiornato per Firebase
     private func addMatch(date: Date, participants: [Participant], winners: [Winner]) {
         // Calcola il montepremi totale dalla somma delle quote di ingresso
         let totalPrize = participants.reduce(0) { $0 + $1.entryFee }
@@ -226,10 +217,10 @@ struct MatchView: View {
                 }
             }
         }
-        // Continua a salvare anche localmente se lo desideri
+        // Continua a salvare anche localmente
         saveMatchesLocally()
     }
-
+    
     private func saveMatchesLocally() {
         do {
             let encoder = JSONEncoder()
@@ -292,7 +283,6 @@ struct MatchView: View {
             print("Failed to load players: \(error)")
         }
     }
-
     
     // Configurazione dell'osservatore per i dati in tempo reale
     private func setupMatchesObserver() {
@@ -323,6 +313,7 @@ struct MatchView: View {
         }
     }
 }
+
 #Preview {
     MatchView()
 }
