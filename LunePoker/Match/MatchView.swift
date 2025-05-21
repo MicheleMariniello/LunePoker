@@ -55,22 +55,23 @@ struct MatchView: View {
                         .ignoresSafeArea(.all)
                     
                     VStack(spacing: 0) {
-                        HStack {
-                            Spacer()
-                            Text("Matches")
-                                .font(.title)
+                        ZStack {
+                            Text("Players")
+                                .font(.largeTitle)
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
                             
-                            Spacer()
-                            
-                            Button(action: { isAddingMatch = true }) {
-                                Image(systemName: "plus")
-                                    .font(.title2)
-                                    .foregroundColor(.blue)
+                            HStack {
+                                Spacer()
+                                Button(action: { isAddingMatch = true }) {
+                                    Image(systemName: "plus.circle.fill")
+                                        .font(.title)
+                                        .foregroundColor(.accent)
+                                }
                             }
                         }
                         .padding()
+
                         
                         if isLoading && !initialLoadCompleted {
                             Spacer()

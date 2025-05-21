@@ -66,6 +66,7 @@ struct EditPlayerView: View {
                     Button("Cancel") {
                         presentationMode.wrappedValue.dismiss()
                     }
+                    .tint(Color.accent)
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
@@ -73,6 +74,7 @@ struct EditPlayerView: View {
                         saveChanges(updatedPlayer)
                         presentationMode.wrappedValue.dismiss()
                     }
+                    .tint(Color.accent)
                     .disabled(name.isEmpty || nickname.isEmpty || selectedCard1.isEmpty || selectedCard2.isEmpty)
                 }
             }

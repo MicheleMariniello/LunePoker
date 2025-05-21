@@ -50,42 +50,65 @@ struct StatView: View {
                 Color.black.edgesIgnoringSafeArea(.all)
                 
                 VStack {
-                    Text("Statistics")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .padding()
+                    HStack {
+                        Image(systemName: "chart.line.uptrend.xyaxis") // icona a sinistra
+                            .foregroundColor(.white)
+                        Spacer()
+                        Text("Statistics")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(Color.white)
+                        Spacer()
+                        Image(systemName: "chart.line.downtrend.xyaxis") // icona a destra
+                            .foregroundColor(.white)
+                    }
+                    .padding(.horizontal)
                     
-                    VStack(spacing: 10) {
-                        Picker("Period", selection: $periodFilter) {
-                            ForEach(PeriodFilter.allCases) { period in
-                                Text(period.rawValue).tag(period)
-                            }
-                        }
-                        .pickerStyle(MenuPickerStyle())
-                        
+                    
+                    VStack(alignment: .center, spacing: 15) {
                         HStack {
+                            Text("Select Period:")
+                                .bold()
+                                .frame(width: 130, alignment: .leading)
+                            Picker("Period", selection: $periodFilter) {
+                                ForEach(PeriodFilter.allCases) { period in
+                                    Text(period.rawValue).tag(period)
+                                }
+                            }
+                            .pickerStyle(MenuPickerStyle())
+                            .tint(Color(red: 206/255, green: 190/255, blue: 101/255))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+
+                        HStack {
+                            Text("Select Statistic:")
+                                .bold()
+                                .frame(width: 130, alignment: .leading)
                             Picker("Statistic", selection: $selectedStatistic) {
                                 ForEach(StatisticType.allCases) { statType in
                                     Text(statType.rawValue).tag(statType)
                                 }
                             }
                             .pickerStyle(MenuPickerStyle())
-                            
-                            Spacer()
-                            
+                            .tint(Color(red: 206/255, green: 190/255, blue: 101/255))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+
+                        HStack {
+                            Text("Select Order:")
+                                .bold()
+                                .frame(width: 130, alignment: .leading)
                             Picker("Order", selection: $sortOrder) {
                                 ForEach(SortOrder.allCases) { order in
                                     Text(order.rawValue).tag(order)
                                 }
                             }
                             .pickerStyle(MenuPickerStyle())
+                            .tint(Color(red: 206/255, green: 190/255, blue: 101/255))
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
-                    .padding()
-                    .background(Color(UIColor.systemGray6))
-                    .cornerRadius(10)
-                    .padding(.horizontal)
+                    .padding(.leading, 55)
                     
                     if matches.isEmpty {
                         Spacer()
@@ -112,7 +135,7 @@ struct StatView: View {
                             }
                             
                             Section(header: Text("General statistics")
-                                .foregroundColor(.white)) {
+                                .foregroundColor(.white).font(.headline)) {
                                     StatInfoRow(title: "Total matches", value: "\(filteredMatches.count)")
                                     StatInfoRow(title: "Total prize pool", value: "€\(String(format: "%.2f", totalPrizePool))")
                                     if let lastMatch = filteredMatches.sorted(by: { $0.date > $1.date }).first {
@@ -130,8 +153,9 @@ struct StatView: View {
                             }
                         }
                     }
-                }
+                }//End VStack
                 .foregroundColor(.white)
+                .padding()
             }
             .toolbarColorScheme(.dark, for: .navigationBar)
             .preferredColorScheme(.dark)

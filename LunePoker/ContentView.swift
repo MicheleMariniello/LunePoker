@@ -37,7 +37,9 @@ struct ContentView: View {
                     Label("Statistics", systemImage: "chart.bar.fill")
                 }
                 .tag(2)
+                
         }
+        .tint(Color.accent)
         .onAppear {
             // Configurazione per eliminare la barra grigia
             let tabBarAppearance = UITabBarAppearance()

@@ -99,7 +99,7 @@ struct AddMatchView: View {
                                         addParticipant(player.id)
                                     } label: {
                                         Text("Add")
-                                            .foregroundColor(.blue)
+                                            .foregroundColor(.accent)
                                     }
                                     .buttonStyle(BorderlessButtonStyle())
                                 }
@@ -181,7 +181,7 @@ struct AddMatchView: View {
                                                 addWinner(participant.playerID)
                                             } label: {
                                                 Text("Add Winner")
-                                                    .foregroundColor(.blue)
+                                                    .foregroundColor(.accent)
                                                     .multilineTextAlignment(.center)
                                             }
                                             .buttonStyle(BorderlessButtonStyle())
@@ -215,7 +215,9 @@ struct AddMatchView: View {
             .navigationBarItems(
                 leading: Button("Cancel") {
                     isPresented = false
-                },
+                }
+                    .tint(Color.accent)
+                ,
                 trailing: Button("Save") {
                     // Validazione
                     if selectedParticipants.isEmpty {
@@ -239,6 +241,7 @@ struct AddMatchView: View {
                     )
                     isPresented = false
                 }
+                    .tint(Color.accent)
                     .disabled(selectedParticipants.isEmpty || winners.isEmpty || !isPrizeBalanced)
             )
         }

@@ -35,22 +35,23 @@ struct PlayerView: View {
                     
                     VStack(spacing: 0) {
                         // Header personalizzato
-                        HStack {
-                            Spacer()
+                        ZStack {
                             Text("Players")
-                                .font(.title)
+                                .font(.largeTitle)
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
                             
-                            Spacer()
-                            
-                            Button(action: { isAddingPlayer = true }) {
-                                Image(systemName: "plus")
-                                    .font(.title2)
-                                    .foregroundColor(.blue)
+                            HStack {
+                                Spacer()
+                                Button(action: { isAddingPlayer = true }) {
+                                    Image(systemName: "plus.circle.fill")
+                                        .font(.title)
+                                        .foregroundColor(.accent)
+                                }
                             }
                         }
                         .padding()
+
                         
                         if isLoading && !initialLoadCompleted {
                             Spacer()

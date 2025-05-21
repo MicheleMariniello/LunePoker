@@ -108,7 +108,7 @@ struct EditMatchView: View {
                                         addParticipant(player.id)
                                     } label: {
                                         Text("Add")
-                                            .foregroundColor(.blue)
+                                            .foregroundColor(.accent)
                                     }
                                     .buttonStyle(BorderlessButtonStyle())
                                 }
@@ -219,7 +219,9 @@ struct EditMatchView: View {
             .navigationBarItems(
                 leading: Button("Cancel") {
                     presentationMode.wrappedValue.dismiss()
-                },
+                }
+                    .tint(Color.accent)
+                ,
                 trailing: Button("Save") {
                     // Validazione
                     if selectedParticipants.isEmpty {
@@ -254,6 +256,7 @@ struct EditMatchView: View {
                     saveChanges(updatedMatch)
                     presentationMode.wrappedValue.dismiss()
                 }
+                    .tint(Color.accent)
                     .disabled(selectedParticipants.isEmpty || winners.isEmpty || !isPrizeBalanced)
             )
         }
