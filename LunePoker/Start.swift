@@ -14,8 +14,9 @@ struct Start: View {
     
     var body: some View {
         AnimatedImage(name: "StartGif.gif")
-            .resizable()
-            .ignoresSafeArea()
+//            .resizable()
+//            .ignoresSafeArea()
+            .background(Color.blackBackGround)
     }
 }
 

@@ -76,7 +76,7 @@ struct StatView: View {
                                 }
                             }
                             .pickerStyle(MenuPickerStyle())
-                            .tint(Color(red: 206/255, green: 190/255, blue: 101/255))
+                            .tint(Color.accent)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         }
 
@@ -90,7 +90,7 @@ struct StatView: View {
                                 }
                             }
                             .pickerStyle(MenuPickerStyle())
-                            .tint(Color(red: 206/255, green: 190/255, blue: 101/255))
+                            .tint(Color.accent)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         }
 
@@ -104,7 +104,7 @@ struct StatView: View {
                                 }
                             }
                             .pickerStyle(MenuPickerStyle())
-                            .tint(Color(red: 206/255, green: 190/255, blue: 101/255))
+                            .tint(Color.accent)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
@@ -155,7 +155,7 @@ struct StatView: View {
                     }
                 }//End VStack
                 .foregroundColor(.white)
-                .padding()
+//                .padding()
             }
             .toolbarColorScheme(.dark, for: .navigationBar)
             .preferredColorScheme(.dark)
