@@ -15,9 +15,10 @@ struct PlayerStatRow: View {
             VStack(alignment: .leading) {
                 Text(stat.player.name)
                     .font(.headline)
+                    .foregroundColor(.white)
                 Text(stat.player.nickname)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.gray)
             }
             
             Spacer()
@@ -26,6 +27,10 @@ struct PlayerStatRow: View {
                 .font(.system(.body, design: .monospaced))
                 .fontWeight(.bold)
         }
+        .padding(.vertical, 6)
+        .padding(.horizontal, 16)
+        .background(Color.black)
+//        Divider().background(Color.gray.opacity(0.3))
     }
     
     var statValue: some View {
@@ -48,6 +53,7 @@ struct PlayerStatRow: View {
                     .foregroundColor(.blue)
             case .participations:
                 Text("\(stat.totalParticipations)")
+                    .foregroundColor(.white)
             case .winRate:
                 Text("\(String(format: "%.1f", stat.winRate))%")
                     .foregroundColor(.purple)

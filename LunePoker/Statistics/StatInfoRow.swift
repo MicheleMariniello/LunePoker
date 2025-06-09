@@ -21,5 +21,10 @@ struct StatInfoRow: View {
                 .font(.system(.body, design: .monospaced))
                 .fontWeight(.medium)
         }
+        .padding(.vertical, 8)
+        .padding(.horizontal, 16)
+        .background(Color.black)
+//        Divider().background(Color.gray.opacity(0.3))
     }
 }
+

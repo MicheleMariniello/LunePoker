@@ -4,17 +4,24 @@
     "" : {
 
     },
+    "\n" : {
+
+    },
+    "% Wins" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "% Vittorie"
+          }
+        }
+      }
+    },
     "%@ - %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$@ - %2$@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
             "value" : "%1$@ - %2$@"
           }
         },
@@ -34,12 +41,6 @@
             "value" : "%1$@ (%2$@)"
           }
         },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ (%2$@)"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -50,12 +51,6 @@
     },
     "%@%%" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@%%"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -66,12 +61,6 @@
     },
     "%lld" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -82,12 +71,6 @@
     },
     "%lld°" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld°"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -98,12 +81,6 @@
     },
     "€%@" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "€%@"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -114,12 +91,6 @@
     },
     "Add" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Agregar"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -130,12 +101,6 @@
     },
     "Add Winner" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Agregar Ganador"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -146,44 +111,36 @@
     },
     "Are you sure you want to delete %@?" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Estás seguro de que quieres eliminar %@?"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sei sicuro di voler eliminare %@?"
+            "value" : "Sicuro di voler cancellare  %@?"
           }
         }
       }
     },
     "Are you sure you want to delete the game from  %@?" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Estás seguro de que quieres eliminar la partida de %@?"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vuoi davvero eliminare il gioco da %@?"
+            "value" : "Sicuro di voler cancellare la partita del  %@?"
+          }
+        }
+      }
+    },
+    "Bigger win" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vincita Maggiore"
           }
         }
       }
     },
     "Cancel" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cancelar"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -194,61 +151,26 @@
     },
     "Confirm deletion" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Confirmar eliminación"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conferma Eliminazione"
+            "value" : "Conferma eliminazione"
           }
         }
       }
     },
     "Connecting to servers in progress..." : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Conectando a servidores en progreso..."
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Connessione ai server in corso..."
-          }
-        }
-      }
-    },
-    "Data" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fecha"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Data"
+            "value" : "Connessione al server in corso…"
           }
         }
       }
     },
     "Date" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fecha"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -259,12 +181,6 @@
     },
     "Delete" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Borrar"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -275,12 +191,6 @@
     },
     "Desciption" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Descripción"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -291,12 +201,6 @@
     },
     "Description" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Descripción"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -307,12 +211,6 @@
     },
     "Edit Match" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Editar partido"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -323,12 +221,6 @@
     },
     "Edit Player" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Editar jugador"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -337,14 +229,18 @@
         }
       }
     },
-    "General statistics" : {
+    "First places" : {
       "localizations" : {
-        "es" : {
+        "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Estadísticas generales"
+            "value" : "Primi Posti"
           }
-        },
+        }
+      }
+    },
+    "General statistics" : {
+      "localizations" : {
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -355,12 +251,6 @@
     },
     "Lune Poker" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lune Poker"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -371,28 +261,16 @@
     },
     "Match Data" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Datos del partido"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dati Partita"
+            "value" : "Data della Partita"
           }
         }
       }
     },
     "Matches" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Partidos"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -403,12 +281,6 @@
     },
     "Name" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nombre"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -419,12 +291,6 @@
     },
     "New Match" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nuevo partido"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -435,12 +301,6 @@
     },
     "New Player" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nuevo jugador"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -451,12 +311,6 @@
     },
     "Nickname" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nickname"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -467,28 +321,16 @@
     },
     "No data available for the selected period" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No hay datos disponibles para el período seleccionado"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nessun dato disponibile per il periodo selezionato"
+            "value" : "Nessuna data disponibile per il periodo selezionato"
           }
         }
       }
     },
     "No games recorded" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No hay juegos grabados"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -497,30 +339,8 @@
         }
       }
     },
-    "Order" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Orden"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ordine"
-          }
-        }
-      }
-    },
     "Participants and fees" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Participantes y tarifas"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -529,30 +349,18 @@
         }
       }
     },
-    "Period" : {
+    "Participations" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Período"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Periodo"
+            "value" : "Partecipazioni"
           }
         }
       }
     },
     "Player Info" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Información del jugador"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -563,12 +371,6 @@
     },
     "Players" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jugadores"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -579,44 +381,36 @@
     },
     "Please check your internet connection and try again." : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Por favor verifique su conexión a Internet y vuelva a intentarlo."
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Controlla la tua connessione Internet e riprova."
+            "value" : "Controlla la tua connessione internet e riprova"
+          }
+        }
+      }
+    },
+    "Podiums (top 3)" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podi (top 3)"
           }
         }
       }
     },
     "Prize money: €%@" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Premio en efectivo: €%@"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "€%@"
+            "value" : "Montepremi: €%@"
           }
         }
       }
     },
     "Save" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ahorrar"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -627,90 +421,26 @@
     },
     "Select Favorite Hand" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seleccionar mano favorita"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Seleziona la mano preferita"
-          }
-        }
-      }
-    },
-    "Select Order:" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ordinamento:"
-          }
-        }
-      }
-    },
-    "Select Period:" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Periodo:"
-          }
-        }
-      }
-    },
-    "Select Statistic:" : {
-      "localizations" : {
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Statistica:"
+            "value" : "Seleziona Mano preferita"
           }
         }
       }
     },
     "Seleziona Mano Preferita" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Selección Mano Preferida"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Seleziona mano preferita"
-          }
-        }
-      }
-    },
-    "Statistic" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Estadística"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Statistiche"
+            "value" : "Seleziona Mano preferita"
           }
         }
       }
     },
     "Statistics" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Estadística"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -721,92 +451,76 @@
     },
     "Synchronizing Matches..." : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sincronizando partidos..."
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sincronizzando Partite…"
+            "value" : "Sincronizzazione Partite…"
           }
         }
       }
     },
     "Synchronizing Players..." : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sincronizando jugadores..."
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sincronizzando Giocatori…"
+            "value" : "Sincronizzazione Giocatori…"
           }
         }
       }
     },
     "There are no players available." : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No hay jugadores disponibles"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Non ci sono giocatori disponibili."
+            "value" : "Non ci sono giocatori disponibili"
           }
         }
       }
     },
     "There are no players available. Add players first." : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No hay jugadores disponibles. Añade jugadores primero."
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Non ci sono giocatori disponibili. Aggiungi prima i giocatori."
+            "value" : "Non ci sono giocatori disponibile. Aggiungi prima giocatori."
+          }
+        }
+      }
+    },
+    "Total budget" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vincite Nette"
+          }
+        }
+      }
+    },
+    "Total losses" : {
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perdite Totali"
           }
         }
       }
     },
     "Total prize pool" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "premio acumulado total"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Montepremi Totale"
+            "value" : "Montepremi totale"
           }
         }
       }
     },
-    "Total winnings:" : {
+    "Total winnings" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ganancias totales:"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -815,14 +529,18 @@
         }
       }
     },
-    "Try again" : {
+    "Total winnings:" : {
       "localizations" : {
-        "es" : {
+        "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Intentar otra vez"
+            "value" : "Vincite totali"
           }
-        },
+        }
+      }
+    },
+    "Try again" : {
+      "localizations" : {
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -833,12 +551,6 @@
     },
     "Unable to connect to server" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No se puede conectar al servidor"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -849,12 +561,6 @@
     },
     "Winners and placements" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ganadores y colocaciones"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -865,16 +571,10 @@
     },
     "Winners:" : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ganadores:"
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vincitori"
+            "value" : "Vincitori:"
           }
         }
       }

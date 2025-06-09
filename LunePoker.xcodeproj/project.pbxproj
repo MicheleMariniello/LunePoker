@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		293077292DA5563800CF8946 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 293077282DA5563800CF8946 /* Localizable.xcstrings */; };
+		2911D7FD2DF668CF00576E8E /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2911D7FC2DF668CF00576E8E /* Localizable.xcstrings */; };
 		2975E8782DA156A300EBA3D1 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2975E8772DA156A300EBA3D1 /* FirebaseAnalytics */; };
 		2975E87A2DA156A300EBA3D1 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 2975E8792DA156A300EBA3D1 /* FirebaseAnalyticsOnDeviceConversion */; };
 		2975E87C2DA156A300EBA3D1 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 2975E87B2DA156A300EBA3D1 /* FirebaseAnalyticsWithoutAdIdSupport */; };
@@ -54,7 +54,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		293077282DA5563800CF8946 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		2911D7FC2DF668CF00576E8E /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		295854FF2D8C793A001BDB39 /* LunePoker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LunePoker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2958550F2D8C793B001BDB39 /* LunePokerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LunePokerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		295855192D8C793B001BDB39 /* LunePokerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LunePokerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -132,12 +132,12 @@
 		295854F62D8C793A001BDB39 = {
 			isa = PBXGroup;
 			children = (
-				293077282DA5563800CF8946 /* Localizable.xcstrings */,
 				295855012D8C793A001BDB39 /* LunePoker */,
 				295855122D8C793B001BDB39 /* LunePokerTests */,
 				2958551C2D8C793B001BDB39 /* LunePokerUITests */,
 				295855002D8C793A001BDB39 /* Products */,
 				2975E95D2DA227C000EBA3D1 /* GoogleService-Info.plist */,
+				2911D7FC2DF668CF00576E8E /* Localizable.xcstrings */,
 			);
 			sourceTree = "<group>";
 		};
@@ -302,7 +302,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				293077292DA5563800CF8946 /* Localizable.xcstrings in Resources */,
+				2911D7FD2DF668CF00576E8E /* Localizable.xcstrings in Resources */,
 				2975E95E2DA227C000EBA3D1 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -501,7 +501,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = mariniello.michele.LunePoker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -533,7 +533,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = mariniello.michele.LunePoker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

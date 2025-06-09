@@ -15,14 +15,15 @@ struct StatView: View {
     @State private var sortOrder: SortOrder = .descending
     
     enum StatisticType: String, CaseIterable, Identifiable {
+        
+        case firstPlaces = "First places"
         case totalBalance = "Total budget"
+        case winRate = "% Wins"
+        case podiums = "Podiums (top 3)"
         case totalWinnings = "Total winnings"
         case totalLosses = "Total losses"
-        case firstPlaces = "First places"
-        case podiums = "Podiums (top 3)"
-        case participations = "Participations"
-        case winRate = "% Wins"
         case biggestWin = "Bigger win"
+        case participations = "Participations"
         
         var id: String { self.rawValue }
     }
@@ -37,8 +38,8 @@ struct StatView: View {
     }
     
     enum SortOrder: String, CaseIterable, Identifiable {
-        case ascending = "Growing"
         case descending = "Descending"
+        case ascending = "Growing"
         
         var id: String { self.rawValue }
     }
@@ -49,118 +50,103 @@ struct StatView: View {
                 // Background nero per tutta la vista
                 Color.black.edgesIgnoringSafeArea(.all)
                 
-                VStack {
+                VStack(spacing: 0) {
+                    // Titolo fisso
                     HStack {
-                        Image(systemName: "chart.line.uptrend.xyaxis") // icona a sinistra
+                        Image(systemName: "chart.line.uptrend.xyaxis")
                             .foregroundColor(.white)
                         Spacer()
                         Text("Statistics")
                             .font(.largeTitle)
                             .fontWeight(.bold)
-                            .foregroundColor(Color.white)
+                            .foregroundColor(.white)
                         Spacer()
-                        Image(systemName: "chart.line.downtrend.xyaxis") // icona a destra
+                        Image(systemName: "chart.line.downtrend.xyaxis")
                             .foregroundColor(.white)
                     }
                     .padding(.horizontal)
+                    .padding(.top)
                     
-                    
-                    VStack(alignment: .center, spacing: 15) {
-                        HStack {
-                            Text("Select Period:")
-                                .bold()
-                                .frame(width: 130, alignment: .leading)
-                            Picker("Period", selection: $periodFilter) {
-                                ForEach(PeriodFilter.allCases) { period in
-                                    Text(period.rawValue).tag(period)
-                                }
-                            }
-                            .pickerStyle(MenuPickerStyle())
-                            .tint(Color.accent)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                    // Contenuto scrollabile
+                    ScrollView {
+                        VStack(spacing: 20) {
+                            // Horizontal Pickers
+                            HorizontalPicker(title: "Period:", selection: $periodFilter, options: PeriodFilter.allCases)
+                            HorizontalPicker(title: "Statistic:", selection: $selectedStatistic, options: StatisticType.allCases)
+                            HorizontalPicker(title: "Order:", selection: $sortOrder, options: SortOrder.allCases)
                         }
+                        .padding(.horizontal, 25)
+                        .padding(.top, 35)
 
-                        HStack {
-                            Text("Select Statistic:")
-                                .bold()
-                                .frame(width: 130, alignment: .leading)
-                            Picker("Statistic", selection: $selectedStatistic) {
-                                ForEach(StatisticType.allCases) { statType in
-                                    Text(statType.rawValue).tag(statType)
-                                }
+                        // Empty State
+                        if matches.isEmpty {
+                            VStack {
+                                Spacer()
+                                Text("No games recorded")
+                                    .foregroundColor(.gray)
+                                    .padding()
+                                Spacer()
                             }
-                            .pickerStyle(MenuPickerStyle())
-                            .tint(Color.accent)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
+                        } else if filteredMatches.isEmpty {
+                            VStack {
+                                Spacer()
+                                Text("No data available for the selected period")
+                                    .foregroundColor(.gray)
+                                    .padding()
+                                Spacer()
+                            }
+                        } else {
+                            // Custom Statistic Section
+                            VStack(alignment: .center, spacing: 10) {
+                                Text(selectedStatistic.rawValue)
+                                    .font(.title3).bold()
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 25)
+                                
 
-                        HStack {
-                            Text("Select Order:")
-                                .bold()
-                                .frame(width: 130, alignment: .leading)
-                            Picker("Order", selection: $sortOrder) {
-                                ForEach(SortOrder.allCases) { order in
-                                    Text(order.rawValue).tag(order)
+                                VStack(spacing: 0) {
+                                    Divider().background(Color.gray.opacity(0.8))
+                                    ForEach(sortedPlayerStats) { stat in
+                                        PlayerStatRow(stat: stat, statType: selectedStatistic)
+                                            .padding(.vertical, 8)
+                                            .padding(.horizontal, 15)
+                                        
+                                        Divider().background(Color.gray.opacity(0.8))
+                                    }
                                 }
                             }
-                            .pickerStyle(MenuPickerStyle())
-                            .tint(Color.accent)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                    }
-                    .padding(.leading, 55)
-                    
-                    if matches.isEmpty {
-                        Spacer()
-                        Text("No games recorded")
-                            .foregroundColor(.gray)
-                            .padding()
-                        Spacer()
-                    } else if filteredMatches.isEmpty {
-                        Spacer()
-                        Text("No data available for the selected period")
-                            .foregroundColor(.gray)
-                            .padding()
-                        Spacer()
-                    } else {
-                        List {
-                            Section(header:
-                                        Text(selectedStatistic.rawValue)
-                                .font(.headline)
-                                .foregroundColor(.white)
-                            ) {
-                                ForEach(sortedPlayerStats) { stat in
-                                    PlayerStatRow(stat: stat, statType: selectedStatistic)
-                                }
-                            }
-                            
-                            Section(header: Text("General statistics")
-                                .foregroundColor(.white).font(.headline)) {
+                            .padding(.top, 50)
+
+                            // General Statistics Section
+                            VStack(alignment: .center, spacing: 10) {
+                                Text("General statistics")
+                                    .font(.title3).bold()
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 25)
+                                    .padding(.top, 20)
+
+                                VStack(spacing: 0) {
                                     StatInfoRow(title: "Total matches", value: "\(filteredMatches.count)")
                                     StatInfoRow(title: "Total prize pool", value: "€\(String(format: "%.2f", totalPrizePool))")
                                     if let lastMatch = filteredMatches.sorted(by: { $0.date > $1.date }).first {
                                         StatInfoRow(title: "Last game", value: dateFormatter.string(from: lastMatch.date))
                                     }
+                                    Text("\n")
                                 }
-                        }
-                        .listStyle(InsetGroupedListStyle())
-                        .onAppear {
-                            UITableView.appearance().backgroundColor = .black
-                            UITableViewCell.appearance().backgroundColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 1.0)
-                            
-                            if #available(iOS 15.0, *) {
-                                UITableView.appearance().sectionHeaderTopPadding = 0
+                                .padding(.horizontal, 25)
                             }
+                            .padding(.top, 35)
                         }
                     }
-                }//End VStack
+
+                }
                 .foregroundColor(.white)
-//                .padding()
             }
             .toolbarColorScheme(.dark, for: .navigationBar)
             .preferredColorScheme(.dark)
         }
     }
+
     
     // MARK: - Computed Properties
     
@@ -256,7 +242,7 @@ struct StatView: View {
             let totalLosses = totalEntryFees
             
             // MARK: Calcolo percentuale vittorie   CONTROLLARE
-            let winRate = totalParticipations > 0 ? (Double(firstPlaces) / Double(filteredMatches.count)) * 100 : 0
+            let winRate = totalParticipations > 0 ? (Double(firstPlaces) / Double(totalParticipations)) * 100 : 0
             
             return PlayerStat(
                 player: player,

@@ -56,7 +56,7 @@ struct MatchView: View {
                     
                     VStack(spacing: 0) {
                         ZStack {
-                            Text("Players")
+                            Text("Matches")
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
