@@ -54,7 +54,19 @@
     "Are you sure you want delete the game from  %@?" : {
 
     },
+    "Are you sure you want to delete '%@'? This action cannot be undone." : {
+
+    },
+    "Are you sure you want to leave this room? You'll need the room code to rejoin." : {
+
+    },
     "Cancel" : {
+
+    },
+    "Choose your room" : {
+
+    },
+    "Code: %@" : {
 
     },
     "Confirm deletion" : {
@@ -63,10 +75,22 @@
     "Connecting to servers in progress..." : {
 
     },
+    "Create New Room" : {
+
+    },
+    "Create Room" : {
+
+    },
+    "Created: %@" : {
+
+    },
     "Date" : {
 
     },
     "Delete" : {
+
+    },
+    "Delete Room" : {
 
     },
     "Desciption" : {
@@ -75,16 +99,49 @@
     "Description" : {
 
     },
+    "Done" : {
+
+    },
     "Edit Match" : {
 
     },
     "Edit Player" : {
 
     },
+    "Enter room code" : {
+
+    },
+    "Enter room name" : {
+
+    },
+    "Error" : {
+
+    },
     "General statistics" : {
 
     },
+    "Join Existing Room" : {
+
+    },
+    "Join Room" : {
+
+    },
+    "Leave" : {
+
+    },
+    "Leave Room" : {
+
+    },
+    "Loading rooms..." : {
+
+    },
+    "Loading Statistics..." : {
+
+    },
     "Lune Poker" : {
+
+    },
+    "Manage Rooms" : {
 
     },
     "Match Data" : {
@@ -111,6 +168,12 @@
     "No games recorded" : {
 
     },
+    "No rooms found" : {
+
+    },
+    "OK" : {
+
+    },
     "Participants and fees" : {
 
     },
@@ -126,6 +189,18 @@
     "Prize money: €%@" : {
 
     },
+    "Processing..." : {
+
+    },
+    "Room Code" : {
+
+    },
+    "Room Info" : {
+
+    },
+    "Room Name" : {
+
+    },
     "Save" : {
 
     },
@@ -133,6 +208,9 @@
 
     },
     "Select Favourite Hand" : {
+
+    },
+    "Share this code with your friends to invite them!" : {
 
     },
     "Statistics" : {

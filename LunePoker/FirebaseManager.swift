@@ -14,8 +14,26 @@ class FirebaseManager {
     static let shared = FirebaseManager()
     
     private let database = Database.database().reference()
-    private var matchesRef: DatabaseReference { database.child("matches") }
-    private var playersRef: DatabaseReference { database.child("players") }
+    
+    // Riferimenti dinamici basati sulla room corrente
+    private var matchesRef: DatabaseReference {
+        guard let roomId = RoomManager.shared.getRoomId() else {
+            fatalError("No room selected. Cannot access matches.")
+        }
+        return database.child("rooms").child(roomId).child("matches")
+    }
+    
+    private var playersRef: DatabaseReference {
+        guard let roomId = RoomManager.shared.getRoomId() else {
+            fatalError("No room selected. Cannot access players.")
+        }
+        return database.child("rooms").child(roomId).child("players")
+    }
+    
+    // Proprietà per current room ID (per evitare di chiamare RoomManager ripetutamente)
+    var currentRoomId: String? {
+        return RoomManager.shared.getRoomId()
+    }
     
     private init() {
         // Private initializer to ensure singleton
@@ -39,9 +57,20 @@ class FirebaseManager {
         }
     }
     
+    // MARK: - Room Safety Check
+    
+    private func checkRoomAvailability() -> Bool {
+        return RoomManager.shared.getRoomId() != nil
+    }
+    
     // MARK: - Players Methods
     
     func savePlayers(_ players: [Player], completion: @escaping (Error?) -> Void) {
+        guard checkRoomAvailability() else {
+            completion(NSError(domain: "FirebaseManager", code: 1001, userInfo: [NSLocalizedDescriptionKey: "No room selected"]))
+            return
+        }
+        
         // Converti array in dizionario con ID come chiavi
         var playersDict = [String: Any]()
         
@@ -64,6 +93,11 @@ class FirebaseManager {
     }
     
     func fetchPlayers(completion: @escaping ([Player]?, Error?) -> Void) {
+        guard checkRoomAvailability() else {
+            completion(nil, NSError(domain: "FirebaseManager", code: 1001, userInfo: [NSLocalizedDescriptionKey: "No room selected"]))
+            return
+        }
+        
         playersRef.observeSingleEvent(of: .value) { snapshot, _ in
             guard let value = snapshot.value as? [String: [String: Any]] else {
                 completion([], nil)
@@ -97,7 +131,13 @@ class FirebaseManager {
     }
     
     func observePlayers(completion: @escaping ([Player]?) -> Void) {
-        print("Setting up players observer")
+        guard checkRoomAvailability() else {
+            print("No room selected for observing players")
+            completion([])
+            return
+        }
+        
+        print("Setting up players observer for room: \(RoomManager.shared.getRoomId() ?? "unknown")")
         playersRef.observe(.value) { snapshot in
             guard let value = snapshot.value as? [String: [String: Any]] else {
                 print("No players data available or invalid format")
@@ -135,6 +175,11 @@ class FirebaseManager {
     // MARK: - Matches Methods
     
     func saveMatches(_ matches: [Match], completion: @escaping (Error?) -> Void) {
+        guard checkRoomAvailability() else {
+            completion(NSError(domain: "FirebaseManager", code: 1001, userInfo: [NSLocalizedDescriptionKey: "No room selected"]))
+            return
+        }
+        
         // Converti array in dizionario con ID come chiavi
         var matchesDict = [String: Any]()
         
@@ -173,6 +218,11 @@ class FirebaseManager {
     }
     
     func fetchMatches(completion: @escaping ([Match]?, Error?) -> Void) {
+        guard checkRoomAvailability() else {
+            completion(nil, NSError(domain: "FirebaseManager", code: 1001, userInfo: [NSLocalizedDescriptionKey: "No room selected"]))
+            return
+        }
+        
         matchesRef.observeSingleEvent(of: .value) { snapshot, _ in
             guard let value = snapshot.value as? [String: [String: Any]] else {
                 completion([], nil)  // No data yet
@@ -227,6 +277,12 @@ class FirebaseManager {
     }
     
     func observeMatches(completion: @escaping ([Match]?) -> Void) {
+        guard checkRoomAvailability() else {
+            print("No room selected for observing matches")
+            completion([])
+            return
+        }
+        
         matchesRef.observe(.value) { snapshot in
             guard let value = snapshot.value as? [String: [String: Any]] else {
                 completion([])  // No data or deleted
@@ -278,10 +334,126 @@ class FirebaseManager {
         }
     }
     
+    // MARK: - Statistics
+    
+    // Le statistiche vengono calcolate dinamicamente dai dati esistenti
+    // Non c'è bisogno di salvarle separatamente, dato che sono derivate
+    
+    func fetchStatisticsData(completion: @escaping ([Player], [Match], Error?) -> Void) {
+        guard let currentRoomId = currentRoomId else {
+            completion([], [], NSError(domain: "FirebaseManager", code: -1, userInfo: [NSLocalizedDescriptionKey: "No current room"]))
+            return
+        }
+        
+        let group = DispatchGroup()
+        var players: [Player] = []
+        var matches: [Match] = []
+        var fetchError: Error?
+        
+        // Fetch players
+        group.enter()
+        fetchPlayers { fetchedPlayers, error in
+            if let error = error {
+                fetchError = error
+            } else if let fetchedPlayers = fetchedPlayers {
+                players = fetchedPlayers
+            }
+            group.leave()
+        }
+        
+        // Fetch matches
+        group.enter()
+        fetchMatches { fetchedMatches, error in
+            if let error = error {
+                fetchError = error
+            } else if let fetchedMatches = fetchedMatches {
+                matches = fetchedMatches
+            }
+            group.leave()
+        }
+        
+        group.notify(queue: .main) {
+            completion(players, matches, fetchError)
+        }
+    }
+    
+    // MARK: - Room Management
+    
+    func fetchAllRooms(completion: @escaping ([Room]) -> Void) {
+        database.child("rooms").observeSingleEvent(of: .value) { snapshot in
+            var rooms: [Room] = []
+            
+            guard let roomsData = snapshot.value as? [String: [String: Any]] else {
+                completion([])
+                return
+            }
+            
+            for (roomId, roomData) in roomsData {
+                if let infoData = roomData["info"] as? [String: Any],
+                   let id = infoData["id"] as? String,
+                   let name = infoData["name"] as? String,
+                   let code = infoData["code"] as? String,
+                   let createdAtTimestamp = infoData["createdAt"] as? TimeInterval,
+                   let createdBy = infoData["createdBy"] as? String {
+                    
+                    let room = Room(
+                        id: id,
+                        name: name,
+                        code: code,
+                        createdAt: Date(timeIntervalSince1970: createdAtTimestamp),
+                        createdBy: createdBy
+                    )
+                    rooms.append(room)
+                }
+            }
+            
+            // Ordina per data di creazione (più recenti prima)
+            rooms.sort { $0.createdAt > $1.createdAt }
+            completion(rooms)
+        }
+    }
+    
+    func deleteRoom(_ room: Room, completion: @escaping (Error?) -> Void) {
+        let group = DispatchGroup()
+        var deleteError: Error?
+        
+        // Elimina la room
+        group.enter()
+        database.child("rooms").child(room.id).removeValue { error, _ in
+            if let error = error {
+                deleteError = error
+            }
+            group.leave()
+        }
+        
+        // Elimina il codice di mapping
+        group.enter()
+        database.child("roomCodes").child(room.code).removeValue { error, _ in
+            if let error = error {
+                deleteError = error
+            }
+            group.leave()
+        }
+        
+        group.notify(queue: .main) {
+            completion(deleteError)
+        }
+    }
+    
     // MARK: - Cleanup
     
     func removeAllObservers() {
-        playersRef.removeAllObservers()
-        matchesRef.removeAllObservers()
+        // Rimuovi gli observer solo se c'è una room attiva
+        if checkRoomAvailability() {
+            playersRef.removeAllObservers()
+            matchesRef.removeAllObservers()
+        }
+    }
+    
+    // MARK: - Utility
+    
+    private func generateRoomCode() -> String {
+        let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        return String((0..<6).map { _ in letters.randomElement()! })
     }
 }

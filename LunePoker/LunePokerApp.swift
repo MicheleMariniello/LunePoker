@@ -23,6 +23,9 @@ struct LunePokerApp: App {
     @State private var loadingOpacity = 0.0
     @State private var contentOpacity = 0.0
     
+    // RoomManager per gestire le room
+    @StateObject private var roomManager = RoomManager.shared
+    
     init() {
         // Configurazione di Firebase
         FirebaseApp.configure()
@@ -31,8 +34,17 @@ struct LunePokerApp: App {
     var body: some Scene {
         WindowGroup {
             ZStack {
-                ContentView()
-                    .opacity(contentOpacity)
+                // Content principale - mostrato solo se autenticato e in una room
+                if isAuthenticated && roomManager.isInRoom {
+                    ContentView()
+                        .opacity(contentOpacity)
+                }
+                
+                // Room selection - mostrato se autenticato ma non in una room
+                if isAuthenticated && !roomManager.isInRoom {
+                    RoomSelectionView()
+                        .opacity(contentOpacity)
+                }
                 
                 SplashScreen()
                     .opacity(loadingOpacity)
@@ -83,8 +95,20 @@ struct LunePokerApp: App {
                 }
             }
             .preferredColorScheme(.dark)
+            .onAppear {
+                // Carica la room salvata localmente (se presente)
+                roomManager.loadCurrentRoomLocally()
+            }
             .onDisappear {
                 FirebaseManager.shared.removeAllObservers()
+            }
+            .onChange(of: roomManager.isInRoom) { isInRoom in
+                // Quando l'utente entra o esce da una room, anima la transizione
+                if isAuthenticated {
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        contentOpacity = isInRoom ? 1.0 : 1.0
+                    }
+                }
             }
         }
     }

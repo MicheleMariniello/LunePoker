@@ -27,15 +27,11 @@ struct Participant: Identifiable, Codable {
 struct Winner: Identifiable, Codable {
     var id: UUID { playerID }
     let playerID: UUID
-    var position: Int 
+    var position: Int
     var amount: Double
 }
 
 struct MatchView: View {
-    @AppStorage("matches") private var matchesData: Data = Data()
-    
-    @AppStorage("players") private var playersData: Data = Data()
-    
     @State private var matches: [Match] = []
     @State private var players: [Player] = []
     @State private var isAddingMatch = false
@@ -114,11 +110,10 @@ struct MatchView: View {
                 .navigationBarHidden(true)
             }
             .onAppear {
-                loadPlayers()
                 if !initialLoadCompleted {
-                    loadMatches()
+                    loadData()
                 }
-                setupMatchesObserver()
+                setupObservers()
             }
             
             // Alert di conferma come overlay
@@ -211,104 +206,95 @@ struct MatchView: View {
                 self.isLoading = false
                 if let error = error {
                     print("Failed to save matches to Firebase: \(error)")
-                    // Qui potresti mostrare un alert all'utente
                 } else {
-                    // Opzionale: fai qualcosa in caso di successo
                     print("Matches saved to Firebase successfully.")
                 }
             }
         }
-        // Continua a salvare anche localmente
-        saveMatchesLocally()
     }
     
-    private func saveMatchesLocally() {
-        do {
-            let encoder = JSONEncoder()
-            let data = try encoder.encode(matches)
-            matchesData = data
-        } catch {
-            print("Failed to save matches locally: \(error)")
-        }
-    }
-    
-    private func loadMatches() {
+    // Carica SOLO da Firebase (room-specific)
+    private func loadData() {
+        print("Caricando dati per la room corrente...")
         isLoading = true
         
-        // Prima carica i dati locali
-        do {
-            let decoder = JSONDecoder()
-            matches = try decoder.decode([Match].self, from: matchesData)
-        } catch {
-            print("Failed to load matches locally: \(error)")
-        }
+        let group = DispatchGroup()
         
-        // Poi carica i dati da Firebase
-        FirebaseManager.shared.fetchMatches { fetchedMatches, error in
+        // Carica players
+        group.enter()
+        FirebaseManager.shared.fetchPlayers { fetchedPlayers, error in
             DispatchQueue.main.async {
-                self.isLoading = false
-                self.initialLoadCompleted = true
-                
                 if let error = error {
-                    print("Error fetching matches from Firebase: \(error)")
-                    return
+                    print("Error fetching players from Firebase: \(error)")
+                } else if let fetchedPlayers = fetchedPlayers {
+                    print("Players caricati per questa room: \(fetchedPlayers.count)")
+                    self.players = fetchedPlayers
+                } else {
+                    self.players = []
                 }
-                
-                if let fetchedMatches = fetchedMatches {
-                    // Se i dati da Firebase sono vuoti ma abbiamo dati locali,
-                    // sincronizziamo quelli locali con Firebase
-                    if fetchedMatches.isEmpty && !self.matches.isEmpty {
-                        self.saveMatchesToFirebase()
-                    } else {
-                        self.matches = fetchedMatches
-                        
-                        // Salviamo localmente per avere i dati anche offline
-                        do {
-                            let encoder = JSONEncoder()
-                            let data = try encoder.encode(self.matches)
-                            self.matchesData = data
-                        } catch {
-                            print("Failed to save matches locally after fetch: \(error)")
-                        }
-                    }
-                }
+                group.leave()
             }
         }
-    }
-    
-    private func loadPlayers() {
-        do {
-            let decoder = JSONDecoder()
-            players = try decoder.decode([Player].self, from: playersData)
-        } catch {
-            print("Failed to load players: \(error)")
+        
+        // Carica matches
+        group.enter()
+        FirebaseManager.shared.fetchMatches { fetchedMatches, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("Error fetching matches from Firebase: \(error)")
+                } else if let fetchedMatches = fetchedMatches {
+                    print("Matches caricati per questa room: \(fetchedMatches.count)")
+                    self.matches = fetchedMatches
+                } else {
+                    self.matches = []
+                }
+                group.leave()
+            }
+        }
+        
+        // Quando entrambi i caricamenti sono completi
+        group.notify(queue: .main) {
+            self.isLoading = false
+            self.initialLoadCompleted = true
+            print("Caricamento dati completato per la room corrente")
         }
     }
     
-    // Configurazione dell'osservatore per i dati in tempo reale
-    private func setupMatchesObserver() {
+    // Configurazione degli osservatori per i dati in tempo reale
+    private func setupObservers() {
+        // Observer per matches
         FirebaseManager.shared.observeMatches { updatedMatches in
             DispatchQueue.main.async {
-                guard let updatedMatches = updatedMatches else { return }
+                print("Matches aggiornati per la room corrente: \(updatedMatches?.count ?? 0)")
+                guard let updatedMatches = updatedMatches else {
+                    self.matches = []
+                    return
+                }
                 
                 // Aggiorna i dati solo se sono cambiati
                 if !self.matches.elementsEqual(updatedMatches, by: { $0.id == $1.id }) {
                     self.matches = updatedMatches
-                    
-                    // Aggiorna anche i dati locali
-                    do {
-                        let encoder = JSONEncoder()
-                        let data = try encoder.encode(self.matches)
-                        self.matchesData = data
-                    } catch {
-                        print("Failed to save updated matches locally: \(error)")
-                    }
                 }
                 
-                // Assicuriamoci che initialLoadCompleted sia true dopo la prima sincronizzazione
                 if !self.initialLoadCompleted {
                     self.initialLoadCompleted = true
                     self.isLoading = false
+                }
+            }
+        }
+        
+        // Observer per players
+        FirebaseManager.shared.observePlayers { updatedPlayers in
+            DispatchQueue.main.async {
+                print("Players aggiornati per la room corrente: \(updatedPlayers?.count ?? 0)")
+                guard let updatedPlayers = updatedPlayers else {
+                    self.players = []
+                    return
+                }
+                
+                // Aggiorna i dati solo se sono cambiati
+                if !self.players.elementsEqual(updatedPlayers, by: { $0.id == $1.id }) {
+                    self.players = updatedPlayers
                 }
             }
         }

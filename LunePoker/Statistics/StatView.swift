@@ -7,8 +7,10 @@
 import SwiftUI
 
 struct StatView: View {
-    let players: [Player]
-    let matches: [Match]
+    @State private var players: [Player] = []
+    @State private var matches: [Match] = []
+    @State private var isLoading = false
+    @State private var initialLoadCompleted = false
     
     @State private var selectedStatistic: StatisticType = .firstPlaces
     @State private var periodFilter: PeriodFilter = .allTime
@@ -67,83 +69,155 @@ struct StatView: View {
                     .padding(.horizontal)
                     .padding(.top)
                     
-                    // Contenuto scrollabile
-                    ScrollView {
-                        VStack(spacing: 20) {
-                            // Horizontal Pickers
-                            HorizontalPicker(title: "Period:", selection: $periodFilter, options: PeriodFilter.allCases)
-                            HorizontalPicker(title: "Statistic:", selection: $selectedStatistic, options: StatisticType.allCases)
-                            HorizontalPicker(title: "Order:", selection: $sortOrder, options: SortOrder.allCases)
-                        }
-                        .padding(.horizontal, 25)
-                        .padding(.top, 35)
-
-                        // Empty State
-                        if matches.isEmpty {
-                            VStack {
-                                Spacer()
-                                Text("No games recorded")
-                                    .foregroundColor(.gray)
-                                    .padding()
-                                Spacer()
+                    // Loading State
+                    if isLoading && !initialLoadCompleted {
+                        Spacer()
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                            .scaleEffect(1.5)
+                        Text("Loading Statistics...")
+                            .foregroundColor(.gray)
+                            .padding()
+                        Spacer()
+                    } else {
+                        // Contenuto scrollabile
+                        ScrollView {
+                            VStack(spacing: 20) {
+                                // Horizontal Pickers
+                                HorizontalPicker(title: "Period:", selection: $periodFilter, options: PeriodFilter.allCases)
+                                HorizontalPicker(title: "Statistic:", selection: $selectedStatistic, options: StatisticType.allCases)
+                                HorizontalPicker(title: "Order:", selection: $sortOrder, options: SortOrder.allCases)
                             }
-                        } else if filteredMatches.isEmpty {
-                            VStack {
-                                Spacer()
-                                Text("No data available for the selected period")
-                                    .foregroundColor(.gray)
-                                    .padding()
-                                Spacer()
-                            }
-                        } else {
-                            // Custom Statistic Section
-                            VStack(alignment: .center, spacing: 10) {
-                                Text(selectedStatistic.rawValue)
-                                    .font(.title3).bold()
-                                    .foregroundColor(.white)
-                                    .padding(.horizontal, 25)
-                                
+                            .padding(.horizontal, 25)
+                            .padding(.top, 35)
 
-                                VStack(spacing: 0) {
-                                    Divider().background(Color.gray.opacity(0.8))
-                                    ForEach(sortedPlayerStats) { stat in
-                                        PlayerStatRow(stat: stat, statType: selectedStatistic)
-                                            .padding(.vertical, 8)
-                                            .padding(.horizontal, 15)
-                                        
-                                        Divider().background(Color.gray.opacity(0.8))
-                                    }
+                            // Empty State
+                            if matches.isEmpty {
+                                VStack {
+                                    Spacer()
+                                    Text("No games recorded")
+                                        .foregroundColor(.gray)
+                                        .padding()
+                                    Spacer()
                                 }
-                                .padding(.top, 50)
-
-                                // General Statistics Section
+                            } else if filteredMatches.isEmpty {
+                                VStack {
+                                    Spacer()
+                                    Text("No data available for the selected period")
+                                        .foregroundColor(.gray)
+                                        .padding()
+                                    Spacer()
+                                }
+                            } else {
+                                // Custom Statistic Section
                                 VStack(alignment: .center, spacing: 10) {
-                                    Text("General statistics")
+                                    Text(selectedStatistic.rawValue)
                                         .font(.title3).bold()
                                         .foregroundColor(.white)
                                         .padding(.horizontal, 25)
-                                        .padding(.top, 20)
+                                    
 
                                     VStack(spacing: 0) {
-                                        StatInfoRow(title: "Total matches", value: "\(filteredMatches.count)")
-                                        StatInfoRow(title: "Total prize pool", value: "€\(String(format: "%.2f", totalPrizePool))")
-                                        if let lastMatch = filteredMatches.sorted(by: { $0.date > $1.date }).first {
-                                            StatInfoRow(title: "Last game", value: dateFormatter.string(from: lastMatch.date))
+                                        Divider().background(Color.gray.opacity(0.8))
+                                        ForEach(sortedPlayerStats) { stat in
+                                            PlayerStatRow(stat: stat, statType: selectedStatistic)
+                                                .padding(.vertical, 8)
+                                                .padding(.horizontal, 15)
+                                            
+                                            Divider().background(Color.gray.opacity(0.8))
                                         }
-                                        Text("\n")
                                     }
-                                    .padding(.horizontal, 25)
+                                    .padding(.top, 50)
+
+                                    // General Statistics Section
+                                    VStack(alignment: .center, spacing: 10) {
+                                        Text("General statistics")
+                                            .font(.title3).bold()
+                                            .foregroundColor(.white)
+                                            .padding(.horizontal, 25)
+                                            .padding(.top, 20)
+
+                                        VStack(spacing: 0) {
+                                            StatInfoRow(title: "Total matches", value: "\(filteredMatches.count)")
+                                            StatInfoRow(title: "Total prize pool", value: "€\(String(format: "%.2f", totalPrizePool))")
+                                            if let lastMatch = filteredMatches.sorted(by: { $0.date > $1.date }).first {
+                                                StatInfoRow(title: "Last game", value: dateFormatter.string(from: lastMatch.date))
+                                            }
+                                            Text("\n")
+                                        }
+                                        .padding(.horizontal, 25)
+                                    }
+                                    .padding(.top, 35)
                                 }
-                                .padding(.top, 35)
                             }
                         }
                     }
-
                 }
                 .foregroundColor(.white)
             }
             .toolbarColorScheme(.dark, for: .navigationBar)
             .preferredColorScheme(.dark)
+        }
+        .onAppear {
+            if !initialLoadCompleted {
+                loadStatisticsData()
+            }
+            setupObservers()
+        }
+    }
+    
+    // MARK: - Data Loading
+    
+    private func loadStatisticsData() {
+        print("Caricando dati statistiche per la room corrente...")
+        isLoading = true
+        
+        FirebaseManager.shared.fetchStatisticsData { fetchedPlayers, fetchedMatches, error in
+            DispatchQueue.main.async {
+                self.isLoading = false
+                self.initialLoadCompleted = true
+                
+                if let error = error {
+                    print("Errore nel caricamento dati statistiche: \(error)")
+                    return
+                }
+                
+                print("Dati statistiche caricati: \(fetchedPlayers.count) players, \(fetchedMatches.count) matches")
+                self.players = fetchedPlayers
+                self.matches = fetchedMatches
+            }
+        }
+    }
+    
+    private func setupObservers() {
+        // Observer per players
+        FirebaseManager.shared.observePlayers { updatedPlayers in
+            DispatchQueue.main.async {
+                guard let updatedPlayers = updatedPlayers else {
+                    self.players = []
+                    return
+                }
+                
+                if !self.players.elementsEqual(updatedPlayers, by: { $0.id == $1.id }) {
+                    print("Aggiornamento players per statistiche: \(updatedPlayers.count)")
+                    self.players = updatedPlayers
+                }
+            }
+        }
+        
+        // Observer per matches
+        FirebaseManager.shared.observeMatches { updatedMatches in
+            DispatchQueue.main.async {
+                guard let updatedMatches = updatedMatches else {
+                    self.matches = []
+                    return
+                }
+                
+                if !self.matches.elementsEqual(updatedMatches, by: { $0.id == $1.id }) {
+                    print("Aggiornamento matches per statistiche: \(updatedMatches.count)")
+                    self.matches = updatedMatches
+                }
+            }
         }
     }
     
@@ -307,25 +381,5 @@ struct StatView: View {
 }
 
 #Preview {
-    let samplePlayers = [
-        Player(id: UUID(), name: "Alice", nickname: "Ali", description: "aa", SelectedCard1: "AS", SelectedCard2: "KS"),
-        Player(id: UUID(), name: "Bob", nickname: "olone", description: "aa", SelectedCard1: "AS", SelectedCard2: "KS"),
-        Player(id: UUID(), name: "Charlie", nickname: "chaplin", description: "aa", SelectedCard1: "AS", SelectedCard2: "KS")
-    ]
-    
-    let sampleMatches = [
-        Match(id: UUID(), date: Date(), participants:[
-            Participant(playerID: samplePlayers[0].id, entryFee: 10),
-            Participant(playerID: samplePlayers[1].id, entryFee: 15),
-            Participant(playerID: samplePlayers[2].id, entryFee: 20)], totalPrize: 100,
-              winners: [Winner(playerID: samplePlayers[0].id, position: 1, amount: 50)
-                       ]),
-        Match(id: UUID(), date: Date().addingTimeInterval(-86400), participants: [
-            Participant(playerID: samplePlayers[0].id, entryFee: 10),
-            Participant(playerID: samplePlayers[1].id, entryFee: 15)], totalPrize: 80,
-              winners: [Winner(playerID: samplePlayers[1].id, position: 1, amount: 40)
-                       ])
-    ]
-    
-    StatView(players: samplePlayers, matches: sampleMatches)
+    StatView()
 }
