@@ -10,7 +10,7 @@ struct StatView: View {
     let players: [Player]
     let matches: [Match]
     
-    @State private var selectedStatistic: StatisticType = .totalBalance
+    @State private var selectedStatistic: StatisticType = .firstPlaces
     @State private var periodFilter: PeriodFilter = .allTime
     @State private var sortOrder: SortOrder = .descending
     
@@ -114,28 +114,28 @@ struct StatView: View {
                                         Divider().background(Color.gray.opacity(0.8))
                                     }
                                 }
-                            }
-                            .padding(.top, 50)
+                                .padding(.top, 50)
 
-                            // General Statistics Section
-                            VStack(alignment: .center, spacing: 10) {
-                                Text("General statistics")
-                                    .font(.title3).bold()
-                                    .foregroundColor(.white)
-                                    .padding(.horizontal, 25)
-                                    .padding(.top, 20)
+                                // General Statistics Section
+                                VStack(alignment: .center, spacing: 10) {
+                                    Text("General statistics")
+                                        .font(.title3).bold()
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 25)
+                                        .padding(.top, 20)
 
-                                VStack(spacing: 0) {
-                                    StatInfoRow(title: "Total matches", value: "\(filteredMatches.count)")
-                                    StatInfoRow(title: "Total prize pool", value: "€\(String(format: "%.2f", totalPrizePool))")
-                                    if let lastMatch = filteredMatches.sorted(by: { $0.date > $1.date }).first {
-                                        StatInfoRow(title: "Last game", value: dateFormatter.string(from: lastMatch.date))
+                                    VStack(spacing: 0) {
+                                        StatInfoRow(title: "Total matches", value: "\(filteredMatches.count)")
+                                        StatInfoRow(title: "Total prize pool", value: "€\(String(format: "%.2f", totalPrizePool))")
+                                        if let lastMatch = filteredMatches.sorted(by: { $0.date > $1.date }).first {
+                                            StatInfoRow(title: "Last game", value: dateFormatter.string(from: lastMatch.date))
+                                        }
+                                        Text("\n")
                                     }
-                                    Text("\n")
+                                    .padding(.horizontal, 25)
                                 }
-                                .padding(.horizontal, 25)
+                                .padding(.top, 35)
                             }
-                            .padding(.top, 35)
                         }
                     }
 
@@ -146,7 +146,6 @@ struct StatView: View {
             .preferredColorScheme(.dark)
         }
     }
-
     
     // MARK: - Computed Properties
     

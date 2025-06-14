@@ -44,7 +44,7 @@ struct EditPlayerView: View {
                     TextField("Description", text: $description)
                 }
 
-                Section(header: Text("Seleziona Mano Preferita")) {
+                Section(header: Text("Select Favourite Hand")) {
                     LazyVGrid(columns: columns, spacing: 10) {
                         ForEach(allCards, id: \.self) { card in
                             Image(card)

@@ -145,7 +145,7 @@ struct MatchView: View {
                         
                         let dateString = dateFormatter.string(from: match.date)
                         
-                        Text("Are you sure you want to delete the game from  \(dateString)?")
+                        Text("Are you sure you want delete the game from  \(dateString)?")
                             .padding(.horizontal)
                         
                         HStack {
@@ -155,7 +155,7 @@ struct MatchView: View {
                             }
                             .padding()
                             .frame(maxWidth: .infinity)
-                            .background(Color.blue)
+                            .background(Color.gray.opacity(0.7))
                             .foregroundStyle(.white)
                             .cornerRadius(8)
                             
@@ -166,14 +166,14 @@ struct MatchView: View {
                             }
                             .padding()
                             .frame(maxWidth: .infinity)
-                            .background(Color.red)
-                            .foregroundColor(.white)
+                            .background(Color.accent)
+                            .foregroundColor(.black)
                             .cornerRadius(8)
                         }
                         .padding()
                     }
                     .frame(width: 300)
-                    .background(Color.black)
+                    .background(Color.black.opacity(0.9))
                     .foregroundStyle(.white)
                     .cornerRadius(12)
                     .shadow(radius: 10)
