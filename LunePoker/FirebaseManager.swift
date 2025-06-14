@@ -336,9 +336,6 @@ class FirebaseManager {
     
     // MARK: - Statistics
     
-    // Le statistiche vengono calcolate dinamicamente dai dati esistenti
-    // Non c'è bisogno di salvarle separatamente, dato che sono derivate
-    
     func fetchStatisticsData(completion: @escaping ([Player], [Match], Error?) -> Void) {
         guard let currentRoomId = currentRoomId else {
             completion([], [], NSError(domain: "FirebaseManager", code: -1, userInfo: [NSLocalizedDescriptionKey: "No current room"]))
@@ -396,12 +393,20 @@ class FirebaseManager {
                    let createdAtTimestamp = infoData["createdAt"] as? TimeInterval,
                    let createdBy = infoData["createdBy"] as? String {
                     
+                    var imageURL = infoData["imageURL"] as? String
+                    
+                    // Se c'è imageData (base64), convertilo in data URL
+                    if imageURL == nil, let imageData = infoData["imageData"] as? String {
+                        imageURL = "data:image/jpeg;base64,\(imageData)"
+                    }
+                    
                     let room = Room(
                         id: id,
                         name: name,
                         code: code,
                         createdAt: Date(timeIntervalSince1970: createdAtTimestamp),
-                        createdBy: createdBy
+                        createdBy: createdBy,
+                        imageURL: imageURL
                     )
                     rooms.append(room)
                 }
@@ -410,6 +415,69 @@ class FirebaseManager {
             // Ordina per data di creazione (più recenti prima)
             rooms.sort { $0.createdAt > $1.createdAt }
             completion(rooms)
+        }
+    }
+    
+    func updateRoom(_ room: Room, completion: @escaping (Error?) -> Void) {
+        var roomData: [String: Any] = [
+            "id": room.id,
+            "name": room.name,
+            "code": room.code,
+            "createdAt": room.createdAt.timeIntervalSince1970,
+            "createdBy": room.createdBy
+        ]
+        
+        // Gestisci l'imageURL o imageData
+        if let imageURL = room.imageURL {
+            if imageURL.hasPrefix("data:image/jpeg;base64,") {
+                // È un'immagine base64, salva come imageData
+                let base64String = String(imageURL.dropFirst("data:image/jpeg;base64,".count))
+                roomData["imageData"] = base64String
+                roomData["imageURL"] = NSNull() // Rimuovi l'URL se presente
+            } else {
+                // È un URL normale
+                roomData["imageURL"] = imageURL
+            }
+        } else {
+            roomData["imageURL"] = NSNull()
+        }
+        
+        print("Updating room with data: \(roomData)")
+        
+        database.child("rooms").child(room.id).child("info").setValue(roomData) { error, _ in
+            if let error = error {
+                print("Error updating room: \(error.localizedDescription)")
+            } else {
+                print("Room updated successfully")
+            }
+            completion(error)
+        }
+    }
+    
+    func uploadRoomImageAsBase64(_ imageData: Data, roomId: String, completion: @escaping (String?, Error?) -> Void) {
+        // Comprimi l'immagine per ridurre la dimensione
+        guard let image = UIImage(data: imageData),
+              let compressedData = image.jpegData(compressionQuality: 0.3) else {
+            completion(nil, NSError(domain: "FirebaseManager", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to compress image"]))
+            return
+        }
+        
+        // Controlla che l'immagine non sia troppo grande (max 1MB per il database)
+        guard compressedData.count < 1_000_000 else {
+            completion(nil, NSError(domain: "FirebaseManager", code: -1, userInfo: [NSLocalizedDescriptionKey: "Image too large. Please use a smaller image."]))
+            return
+        }
+        
+        let base64String = compressedData.base64EncodedString()
+        let dataURL = "data:image/jpeg;base64,\(base64String)"
+        
+        // Salva direttamente nel database
+        database.child("rooms").child(roomId).child("info").child("imageData").setValue(base64String) { error, _ in
+            if let error = error {
+                completion(nil, error)
+            } else {
+                completion(dataURL, nil)
+            }
         }
     }
     

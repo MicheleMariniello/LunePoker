@@ -54,16 +54,22 @@
     "Are you sure you want delete the game from  %@?" : {
 
     },
-    "Are you sure you want to delete '%@'? This action cannot be undone." : {
+    "Are you sure you want to leave this room? You'll need the room code to rejoin." : {
 
     },
-    "Are you sure you want to leave this room? You'll need the room code to rejoin." : {
+    "Are you sure you want to permanently delete this room? This action cannot be undone and will remove all players, matches, and statistics." : {
+
+    },
+    "Camera" : {
 
     },
     "Cancel" : {
 
     },
     "Choose your room" : {
+
+    },
+    "Code:" : {
 
     },
     "Code: %@" : {
@@ -81,7 +87,7 @@
     "Create Room" : {
 
     },
-    "Created: %@" : {
+    "Created:" : {
 
     },
     "Date" : {
@@ -108,6 +114,9 @@
     "Edit Player" : {
 
     },
+    "Edit Room" : {
+
+    },
     "Enter room code" : {
 
     },
@@ -132,16 +141,10 @@
     "Leave Room" : {
 
     },
-    "Loading rooms..." : {
-
-    },
     "Loading Statistics..." : {
 
     },
     "Lune Poker" : {
-
-    },
-    "Manage Rooms" : {
 
     },
     "Match Data" : {
@@ -168,13 +171,13 @@
     "No games recorded" : {
 
     },
-    "No rooms found" : {
-
-    },
     "OK" : {
 
     },
     "Participants and fees" : {
+
+    },
+    "Photo Library" : {
 
     },
     "Player Info" : {
@@ -195,6 +198,12 @@
     "Room Code" : {
 
     },
+    "Room Details" : {
+
+    },
+    "Room Image" : {
+
+    },
     "Room Info" : {
 
     },
@@ -204,10 +213,19 @@
     "Save" : {
 
     },
+    "Save Changes" : {
+
+    },
+    "Saving..." : {
+
+    },
     "Select Favorite Hand" : {
 
     },
     "Select Favourite Hand" : {
+
+    },
+    "Select Image Source" : {
 
     },
     "Share this code with your friends to invite them!" : {

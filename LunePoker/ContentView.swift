@@ -18,27 +18,60 @@ struct ContentView: View {
     // Stati per memorizzare i dati decodificati
     @State private var players: [Player] = []
     @State private var matches: [Match] = []
-    @State private var showRoomInfo = false
+    @State private var showEditRoom = false
     
     var body: some View {
         VStack(spacing: 0) {
             // Header con info room
             HStack {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(roomManager.currentRoom?.name ?? "Room")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                    
+                HStack(spacing: 12) {
+                    // Room image or default icon
                     if let room = roomManager.currentRoom {
-                        Text("Code: \(room.code)")
-                            .font(.caption)
-                            .foregroundColor(.gray)
+                        if let imageURL = room.imageURL, !imageURL.isEmpty {
+                            AsyncImage(url: URL(string: imageURL)) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 45, height: 45)
+                                    .clipShape(Circle())
+                            } placeholder: {
+                                Circle()
+                                    .fill(Color.gray.opacity(0.3))
+                                    .frame(width: 45, height: 45)
+                                    .overlay(
+                                        Image(systemName: "house.fill")
+                                            .foregroundColor(.white)
+                                            .font(.title3)
+                                    )
+                            }
+                        } else {
+                            Circle()
+                                .fill(Color.gray.opacity(0.3))
+                                .frame(width: 45, height: 45)
+                                .overlay(
+                                    Image(systemName: "house.fill")
+                                        .foregroundColor(.white)
+                                        .font(.title3)
+                                )
+                        }
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(roomManager.currentRoom?.name ?? "Room")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                        
+                        if let room = roomManager.currentRoom {
+                            Text("Code: \(room.code)")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                        }
                     }
                 }
                 
                 Spacer()
                 
-                Button(action: { showRoomInfo = true }) {
+                Button(action: { showEditRoom = true }) {
                     Image(systemName: "info.circle")
                         .font(.title2)
                         .foregroundColor(.accent)
@@ -83,9 +116,19 @@ struct ContentView: View {
             
             UITabBar.appearance().unselectedItemTintColor = UIColor.gray
             loadData()
+            
+            // Ricarica i dati della room corrente per assicurarsi che siano aggiornati
+            roomManager.refreshCurrentRoom()
         }
-        .sheet(isPresented: $showRoomInfo) {
-            RoomInfoView()
+        .sheet(isPresented: $showEditRoom) {
+            if let currentRoom = roomManager.currentRoom {
+                EditRoomView(room: .constant(currentRoom)) { updatedRoom in
+                    // Aggiorna la room corrente nel RoomManager
+                    roomManager.currentRoom = updatedRoom
+                    // Ricarica i dati aggiornati da Firebase
+                    roomManager.refreshCurrentRoom()
+                }
+            }
         }
     }
     
@@ -114,10 +157,29 @@ struct RoomInfoView: View {
                 VStack(spacing: 30) {
                     if let room = roomManager.currentRoom {
                         VStack(spacing: 20) {
-                            // Room icon
-                            Image(systemName: "house.fill")
-                                .font(.system(size: 60))
-                                .foregroundColor(.accent)
+                            // Room icon/image
+                            if let imageURL = room.imageURL, !imageURL.isEmpty {
+                                AsyncImage(url: URL(string: imageURL)) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 100, height: 100)
+                                        .clipShape(Circle())
+                                } placeholder: {
+                                    Circle()
+                                        .fill(Color.gray.opacity(0.3))
+                                        .frame(width: 100, height: 100)
+                                        .overlay(
+                                            Image(systemName: "house.fill")
+                                                .font(.system(size: 40))
+                                                .foregroundColor(.accent)
+                                        )
+                                }
+                            } else {
+                                Image(systemName: "house.fill")
+                                    .font(.system(size: 60))
+                                    .foregroundColor(.accent)
+                            }
                             
                             // Room info
                             VStack(spacing: 10) {

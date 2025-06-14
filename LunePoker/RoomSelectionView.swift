@@ -11,7 +11,6 @@ struct RoomSelectionView: View {
     @StateObject private var roomManager = RoomManager.shared
     @State private var showCreateRoom = false
     @State private var showJoinRoom = false
-    @State private var showManageRooms = false
     @State private var isLoading = false
     @State private var errorMessage = ""
     @State private var showError = false
@@ -72,26 +71,6 @@ struct RoomSelectionView: View {
                                 .stroke(Color.gray.opacity(0.5), lineWidth: 1)
                         )
                     }
-                    
-                    // Pulsante per gestire room (eliminarle)
-                    Button(action: { showManageRooms = true }) {
-                        HStack {
-                            Image(systemName: "gear")
-                                .font(.title2)
-                            Text("Manage Rooms")
-                                .font(.headline)
-                                .fontWeight(.semibold)
-                        }
-                        .foregroundColor(.gray)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.clear)
-                        .cornerRadius(12)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                        )
-                    }
                 }
                 .padding(.horizontal)
                 
@@ -120,9 +99,6 @@ struct RoomSelectionView: View {
         }
         .sheet(isPresented: $showJoinRoom) {
             JoinRoomView(onRoomJoined: handleRoomJoined)
-        }
-        .sheet(isPresented: $showManageRooms) {
-            ManageRoomsView()
         }
         .alert("Error", isPresented: $showError) {
             Button("OK") { }
@@ -322,143 +298,6 @@ struct JoinRoomView: View {
                 }
             }
         }
-    }
-}
-
-struct ManageRoomsView: View {
-    @Environment(\.dismiss) private var dismiss
-    @State private var rooms: [Room] = []
-    @State private var isLoading = false
-    @State private var roomToDelete: Room?
-    @State private var showDeleteAlert = false
-    
-    var body: some View {
-        NavigationView {
-            ZStack {
-                Color.black.ignoresSafeArea()
-                
-                VStack {
-                    if isLoading {
-                        Spacer()
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                            .scaleEffect(1.5)
-                        Text("Loading rooms...")
-                            .foregroundColor(.gray)
-                            .padding()
-                        Spacer()
-                    } else if rooms.isEmpty {
-                        Spacer()
-                        VStack(spacing: 10) {
-                            Image(systemName: "house.slash")
-                                .font(.system(size: 50))
-                                .foregroundColor(.gray)
-                            Text("No rooms found")
-                                .foregroundColor(.gray)
-                        }
-                        Spacer()
-                    } else {
-                        ScrollView {
-                            LazyVStack(spacing: 15) {
-                                ForEach(rooms, id: \.id) { room in
-                                    RoomRowView(room: room) {
-                                        roomToDelete = room
-                                        showDeleteAlert = true
-                                    }
-                                }
-                            }
-                            .padding()
-                        }
-                    }
-                }
-            }
-            .navigationTitle("Manage Rooms")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                    .foregroundColor(.accent)
-                }
-            }
-        }
-        .onAppear {
-            loadRooms()
-        }
-        .alert("Delete Room", isPresented: $showDeleteAlert) {
-            Button("Cancel", role: .cancel) { }
-            Button("Delete", role: .destructive) {
-                if let room = roomToDelete {
-                    deleteRoom(room)
-                }
-            }
-        } message: {
-            if let room = roomToDelete {
-                Text("Are you sure you want to delete '\(room.name)'? This action cannot be undone.")
-            }
-        }
-    }
-    
-    private func loadRooms() {
-        isLoading = true
-        RoomManager.shared.fetchAllRooms { fetchedRooms in
-            DispatchQueue.main.async {
-                self.isLoading = false
-                self.rooms = fetchedRooms
-            }
-        }
-    }
-    
-    private func deleteRoom(_ room: Room) {
-        RoomManager.shared.deleteRoom(room) { error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    print("Error deleting room: \(error)")
-                } else {
-                    // Rimuovi la room dalla lista locale
-                    self.rooms.removeAll { $0.id == room.id }
-                }
-            }
-        }
-    }
-}
-
-struct RoomRowView: View {
-    let room: Room
-    let onDelete: () -> Void
-    
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 5) {
-                Text(room.name)
-                    .font(.headline)
-                    .foregroundColor(.white)
-                
-                Text("Code: \(room.code)")
-                    .font(.caption)
-                    .foregroundColor(.gray)
-                
-                Text("Created: \(room.createdAt, style: .date)")
-                    .font(.caption)
-                    .foregroundColor(.gray)
-            }
-            
-            Spacer()
-            
-            Button(action: onDelete) {
-                Image(systemName: "trash")
-                    .foregroundColor(.red)
-                    .font(.title2)
-            }
-        }
-        .padding()
-        .background(Color.gray.opacity(0.1))
-        .cornerRadius(10)
-        .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-        )
     }
 }
 

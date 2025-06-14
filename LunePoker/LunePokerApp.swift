@@ -9,6 +9,8 @@ import SwiftUI
 import FirebaseCore
 import FirebaseAuth
 import SDWebImageSwiftUI
+import Firebase
+import FirebaseStorage
 
 @main
 struct LunePokerApp: App {

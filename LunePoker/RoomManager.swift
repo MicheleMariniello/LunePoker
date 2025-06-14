@@ -8,14 +8,25 @@
 import SwiftUI
 import Foundation
 import FirebaseDatabase
+import FirebaseAuth
 
 // Struttura per rappresentare una room
 struct Room: Identifiable, Codable {
     let id: String
-    let name: String
+    var name: String
     let code: String
     let createdAt: Date
     let createdBy: String
+    var imageURL: String? // Nuovo campo per l'URL dell'immagine
+    
+    init(id: String, name: String, code: String, createdAt: Date, createdBy: String, imageURL: String? = nil) {
+        self.id = id
+        self.name = name
+        self.code = code
+        self.createdAt = createdAt
+        self.createdBy = createdBy
+        self.imageURL = imageURL
+    }
 }
 
 // Manager per gestire le operazioni delle room
@@ -239,5 +250,22 @@ class RoomManager: ObservableObject {
     private func generateRoomCode() -> String {
         let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         return String((0..<6).map { _ in letters.randomElement()! })
+    }
+    
+    func refreshCurrentRoom() {
+        guard let currentRoomId = currentRoom?.id else { return }
+        
+        FirebaseManager.shared.fetchAllRooms { [weak self] rooms in
+            DispatchQueue.main.async {
+                if let updatedRoom = rooms.first(where: { $0.id == currentRoomId }) {
+                    self?.currentRoom = updatedRoom
+                    print("Room refreshed: \(updatedRoom.name), imageURL: \(updatedRoom.imageURL ?? "nil")")
+                }
+            }
+        }
+    }
+    
+    func getCurrentUserUID() -> String? {
+        return Auth.auth().currentUser?.uid
     }
 }
