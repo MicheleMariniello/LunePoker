@@ -101,7 +101,7 @@ struct MatchView: View {
                         }
                     }
                     .sheet(isPresented: $isAddingMatch) {
-                        AddMatchView(isPresented: $isAddingMatch, saveMatch: addMatch, players: players)
+                        AddMatchView(isPresented: $isAddingMatch, saveMatch: addMatch, players: $players)
                     }
                     .sheet(item: $selectedMatch) { match in
                         EditMatchView(match: match, saveChanges: updateMatch, players: players)

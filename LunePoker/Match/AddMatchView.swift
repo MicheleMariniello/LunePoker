@@ -10,7 +10,7 @@ import SwiftUI
 struct AddMatchView: View {
     @Binding var isPresented: Bool
     var saveMatch: (Date, [Participant], [Winner]) -> Void
-    let players: [Player]
+    @Binding var players: [Player]
     
     @State private var matchDate = Date()
     @State private var selectedParticipants: [Participant] = []
@@ -392,14 +392,14 @@ struct AddMatchView: View {
     }
 }
 
-#Preview {
-    AddMatchView(
-        isPresented: .constant(true),
-        saveMatch: { _, _, _ in },
-        players: [
-            Player(id: UUID(), name: "Mario Rossi", nickname: "Marr", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS"),
-            Player(id: UUID(), name: "Luca Bianchi", nickname: "Zrro", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS"),
-            Player(id: UUID(), name: "Giulia Verdi", nickname: "a", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS")
-        ]
-    )
-}
+//#Preview {
+//    AddMatchView(
+//        isPresented: .constant(true),
+//        saveMatch: { _, _, _ in },
+//        players: [
+//            Player(id: UUID(), name: "Mario Rossi", nickname: "Marr", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS"),
+//            Player(id: UUID(), name: "Luca Bianchi", nickname: "Zrro", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS"),
+//            Player(id: UUID(), name: "Giulia Verdi", nickname: "a", description: "Ho 20 anni", SelectedCard1: "AS", SelectedCard2: "KS")
+//        ]
+//    )
+//}

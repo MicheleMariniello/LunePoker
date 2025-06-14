@@ -39,6 +39,12 @@
     "%lld°" : {
 
     },
+    "•" : {
+
+    },
+    "⚠️ This action cannot be undone!" : {
+
+    },
     "€%@" : {
 
     },
@@ -48,6 +54,18 @@
     "Add Winner" : {
 
     },
+    "All match history and results" : {
+
+    },
+    "All players and their information" : {
+
+    },
+    "All statistics and analytics" : {
+
+    },
+    "Are you absolutely sure you want to delete '%@'?" : {
+
+    },
     "Are you sure you want delete %@?" : {
 
     },
@@ -55,9 +73,6 @@
 
     },
     "Are you sure you want to leave this room? You'll need the room code to rejoin." : {
-
-    },
-    "Are you sure you want to permanently delete this room? This action cannot be undone and will remove all players, matches, and statistics." : {
 
     },
     "Camera" : {
@@ -90,6 +105,9 @@
     "Created:" : {
 
     },
+    "Danger Zone" : {
+
+    },
     "Date" : {
 
     },
@@ -97,6 +115,15 @@
 
     },
     "Delete Room" : {
+
+    },
+    "Delete Room Forever" : {
+
+    },
+    "Deleting this room will permanently remove:" : {
+
+    },
+    "Deleting..." : {
 
     },
     "Desciption" : {
@@ -124,6 +151,9 @@
 
     },
     "Error" : {
+
+    },
+    "Final Confirmation" : {
 
     },
     "General statistics" : {
@@ -210,6 +240,9 @@
     "Room Name" : {
 
     },
+    "Room settings and customizations" : {
+
+    },
     "Save" : {
 
     },
@@ -246,6 +279,12 @@
     "There are no players available. Add players first." : {
 
     },
+    "This action is PERMANENT and cannot be reversed. All data will be lost forever." : {
+
+    },
+    "This is your last chance to change your mind" : {
+
+    },
     "Total prize pool" : {
 
     },
@@ -262,6 +301,9 @@
 
     },
     "Winners:" : {
+
+    },
+    "You are about to delete:" : {
 
     }
   },

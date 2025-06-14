@@ -22,7 +22,7 @@ struct EditRoomView: View {
     @State private var showImageOptions = false
     @State private var showCamera = false
     @State private var showLeaveAlert = false
-    @State private var showDeleteAlert = false
+    @State private var showDeleteView = false
     @State private var showPhotoPicker = false
     
     let onSave: (Room) -> Void
@@ -46,56 +46,10 @@ struct EditRoomView: View {
                             .foregroundColor(.white)
                         
                         Button(action: { showImageOptions = true }) {
-                            ZStack {
-                                Circle()
-                                    .fill(Color.gray.opacity(0.3))
-                                    .frame(width: 120, height: 120)
-                                    .overlay(
-                                        Circle()
-                                            .stroke(Color.accent, lineWidth: 2)
-                                    )
-                                
-                                if let roomImage = roomImage {
-                                    Image(uiImage: roomImage)
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 120, height: 120)
-                                        .clipShape(Circle())
-                                } else if let imageURL = room.imageURL, !imageURL.isEmpty {
-                                    AsyncImage(url: URL(string: imageURL)) { image in
-                                        image
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 120, height: 120)
-                                            .clipShape(Circle())
-                                    } placeholder: {
-                                        Image(systemName: "house.fill")
-                                            .font(.system(size: 40))
-                                            .foregroundColor(.white)
-                                    }
-                                } else {
-                                    Image(systemName: "house.fill")
-                                        .font(.system(size: 40))
-                                        .foregroundColor(.white)
-                                }
-                                
-                                // Camera icon overlay
-                                VStack {
-                                    Spacer()
-                                    HStack {
-                                        Spacer()
-                                        Circle()
-                                            .fill(Color.accent)
-                                            .frame(width: 30, height: 30)
-                                            .overlay(
-                                                Image(systemName: "camera.fill")
-                                                    .font(.system(size: 15))
-                                                    .foregroundColor(.black)
-                                            )
-                                            .offset(x: -10, y: -10)
-                                    }
-                                }
-                            }
+                            RoomImageView(
+                                roomImage: roomImage,
+                                imageURL: room.imageURL
+                            )
                         }
                     }
                     
@@ -138,7 +92,7 @@ struct EditRoomView: View {
                     .background(Color.gray.opacity(0.1))
                     .cornerRadius(10)
                     
-                    Spacer()
+                    // Save Button
                     Button(action: saveChanges) {
                         HStack {
                             if isLoading {
@@ -168,12 +122,14 @@ struct EditRoomView: View {
                         .foregroundColor(.black)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.accent)
+                        .background(Color.accent) // CORREZIONE: era "Color.accenr"
                         .cornerRadius(12)
                     }
-                    .padding(.bottom, 10)
                     
-                    Button(action: { showDeleteAlert = true }) {
+                    Spacer()
+                    
+                    // Delete Room Button
+                    Button(action: { showDeleteView = true }) {
                         HStack {
                             Image(systemName: "trash.circle.fill")
                             Text("Delete Room")
@@ -185,8 +141,6 @@ struct EditRoomView: View {
                         .background(Color.red.opacity(0.7))
                         .cornerRadius(12)
                     }
-                    .padding(.bottom, 10)
-
                 }
                 .padding()
             }
@@ -235,13 +189,12 @@ struct EditRoomView: View {
         } message: {
             Text("Are you sure you want to leave this room? You'll need the room code to rejoin.")
         }
-        .alert("Delete Room", isPresented: $showDeleteAlert) {
-            Button("Cancel", role: .cancel) { }
-            Button("Delete", role: .destructive) {
-                deleteRoom()
+        .sheet(isPresented: $showDeleteView) {
+            DeleteRoomView(room: room) {
+                // Callback quando la room viene eliminata
+                RoomManager.shared.leaveRoom()
+                dismiss()
             }
-        } message: {
-            Text("Are you sure you want to permanently delete this room? This action cannot be undone and will remove all players, matches, and statistics.")
         }
     }
     
@@ -308,62 +261,97 @@ struct EditRoomView: View {
             }
         }
     }
-    
-    private func deleteRoom() {
-        isLoading = true
-        
-        FirebaseManager.shared.deleteRoom(room) { error in
-            DispatchQueue.main.async {
-                self.isLoading = false
-                
-                if let error = error {
-                    self.errorMessage = "Failed to delete room: \(error.localizedDescription)"
-                    self.showError = true
-                    return
-                }
-                
-                // Successo - esci dalla room e chiudi
-                RoomManager.shared.leaveRoom()
-                self.dismiss()
-            }
-        }
-    }
 }
 
-// MARK: - ImagePicker for Camera
-struct ImagePicker: UIViewControllerRepresentable {
-    @Binding var image: UIImage?
-    let sourceType: UIImagePickerController.SourceType
-    
-    func makeUIViewController(context: Context) -> UIImagePickerController {
-        let picker = UIImagePickerController()
-        picker.sourceType = sourceType
-        picker.delegate = context.coordinator
-        return picker
-    }
-    
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-    
-    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-        let parent: ImagePicker
-        
-        init(_ parent: ImagePicker) {
-            self.parent = parent
-        }
-        
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            if let image = info[.originalImage] as? UIImage {
-                parent.image = image
-            }
-            picker.dismiss(animated: true)
-        }
-        
-        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-            picker.dismiss(animated: true)
-        }
-    }
-}
+//// MARK: - Room Image Components
+//struct RoomImageView: View {
+//    let roomImage: UIImage?
+//    let imageURL: String?
+//    
+//    var body: some View {
+//        ZStack {
+//            Circle()
+//                .fill(Color.gray.opacity(0.3))
+//                .frame(width: 120, height: 120)
+//                .overlay(
+//                    Circle()
+//                        .stroke(Color.accent, lineWidth: 2)
+//                )
+//            
+//            // Content based on available image
+//            if let roomImage = roomImage {
+//                Image(uiImage: roomImage)
+//                    .resizable()
+//                    .scaledToFill()
+//                    .frame(width: 120, height: 120)
+//                    .clipShape(Circle())
+//            } else if let imageURL = imageURL, !imageURL.isEmpty {
+//                AsyncImageView(imageURL: imageURL)
+//            } else {
+//                DefaultRoomIcon()
+//            }
+//        }
+//    }
+//}
+
+//struct AsyncImageView: View {
+//    let imageURL: String
+//    
+//    var body: some View {
+//        AsyncImage(url: URL(string: imageURL)) { image in
+//            image
+//                .resizable()
+//                .scaledToFill()
+//                .frame(width: 120, height: 120)
+//                .clipShape(Circle())
+//        } placeholder: {
+//            DefaultRoomIcon()
+//        }
+//    }
+//}
+
+//struct DefaultRoomIcon: View {
+//    var body: some View {
+//        Image(systemName: "house.fill")
+//            .font(.system(size: 40))
+//            .foregroundColor(.white)
+//    }
+//}
+
+//// MARK: - ImagePicker for Camera
+//struct ImagePicker: UIViewControllerRepresentable {
+//    @Binding var image: UIImage?
+//    let sourceType: UIImagePickerController.SourceType
+//    
+//    func makeUIViewController(context: Context) -> UIImagePickerController {
+//        let picker = UIImagePickerController()
+//        picker.sourceType = sourceType
+//        picker.delegate = context.coordinator
+//        return picker
+//    }
+//    
+//    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+//    
+//    func makeCoordinator() -> Coordinator {
+//        Coordinator(self)
+//    }
+//    
+//    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+//        let parent: ImagePicker
+//        
+//        init(_ parent: ImagePicker) {
+//            self.parent = parent
+//        }
+//        
+//        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+//            if let image = info[.originalImage] as? UIImage {
+//                parent.image = image
+//            }
+//            picker.dismiss(animated: true)
+//        }
+//        
+//        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+//            picker.dismiss(animated: true)
+//        }
+//    }
+//}
